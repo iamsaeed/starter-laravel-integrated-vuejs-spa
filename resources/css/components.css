@@ -1,0 +1,499 @@
+/**
+ * Component Styles
+ * Theme-agnostic component definitions using CSS custom properties
+ */
+
+@layer components {
+    button {
+        @apply cursor-pointer;
+    }
+    /* Button Components */
+    .btn-primary {
+        @apply bg-primary-600 hover:bg-primary-700 text-white font-medium px-4 py-2 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md;
+    }
+
+    .btn-secondary {
+        @apply bg-secondary-600 hover:bg-secondary-700 text-white font-medium px-4 py-2 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md;
+    }
+
+    .btn-ghost {
+        @apply text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-700 p-2 rounded-lg transition-all duration-200;
+    }
+
+    /* Card Components */
+    .card {
+        @apply bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300;
+    }
+
+    .card-stat {
+        @apply rounded-lg p-6 text-white;
+    }
+
+    .card-content {
+        @apply bg-gray-50 dark:bg-gray-700/50 rounded-lg p-6;
+    }
+
+    /* Navigation Components */
+    .nav-item {
+        @apply flex items-center text-sm font-medium rounded-lg transition-all duration-200 relative;
+    }
+
+    .nav-item-active {
+        @apply bg-white/20 text-white shadow-md;
+    }
+
+    .nav-item-inactive {
+        @apply text-primary-200 dark:text-primary-300 hover:text-white hover:bg-white/10;
+    }
+
+    /* Sidebar Components */
+    .sidebar-base {
+        @apply fixed inset-y-0 left-0 z-50 bg-gradient-to-b from-primary-600 to-secondary-600 dark:from-primary-800 dark:to-secondary-800 transform transition-all duration-300 ease-in-out shadow-xl;
+    }
+
+    .sidebar-logo {
+        @apply w-8 h-8 bg-white dark:bg-gray-100 rounded-lg flex items-center justify-center shadow-md flex-shrink-0;
+    }
+
+    .sidebar-logo-icon {
+        @apply w-5 h-5 text-primary-600 dark:text-primary-700;
+    }
+
+    /* Text Utilities */
+    .text-title {
+        @apply text-gray-900 dark:text-white;
+    }
+
+    .text-subtitle {
+        @apply text-gray-600 dark:text-gray-300;
+    }
+
+    .text-muted {
+        @apply text-gray-500 dark:text-gray-400;
+    }
+
+    .text-accent {
+        @apply text-primary-600 dark:text-primary-400;
+    }
+
+    /* Layout Utilities */
+    .page-container {
+        @apply min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300;
+    }
+
+    .content-area {
+        @apply transition-all duration-300;
+    }
+
+    /* Mobile Overlay */
+    .mobile-overlay {
+        @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300;
+    }
+
+    /* Logout section styling */
+    .logout-section {
+        border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+    }
+
+    /* Auth Page Components */
+    .auth-container {
+        @apply min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4 transition-colors duration-300;
+    }
+
+    .auth-card {
+        @apply w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-8 transition-colors duration-300;
+    }
+
+    .auth-logo-section {
+        @apply text-center mb-8;
+    }
+
+    .auth-logo {
+        @apply w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-primary-600 to-secondary-600 rounded-full flex items-center justify-center shadow-lg;
+    }
+
+    .auth-logo-icon {
+        @apply text-white;
+    }
+
+    .auth-logo-title {
+        @apply text-2xl font-bold text-gray-900 dark:text-white mb-1;
+    }
+
+    .auth-logo-subtitle {
+        @apply text-sm text-gray-600 dark:text-gray-300;
+    }
+
+    .auth-content {
+        @apply space-y-6;
+    }
+
+    .auth-header {
+        @apply text-center space-y-2;
+    }
+
+    .auth-title {
+        @apply text-2xl font-semibold text-gray-900 dark:text-white;
+    }
+
+    .auth-description {
+        @apply text-gray-600 dark:text-gray-300 leading-relaxed;
+    }
+
+    .auth-form {
+        @apply space-y-4;
+    }
+
+    .auth-input {
+        @apply w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200;
+    }
+
+    .auth-input:focus {
+        @apply shadow-sm;
+    }
+
+    .auth-input.error {
+        @apply border-red-500 focus:ring-red-500;
+    }
+
+    .auth-button-primary {
+        @apply w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    .auth-button-secondary {
+        @apply w-full bg-secondary-600 hover:bg-secondary-700 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2;
+    }
+
+    .auth-button-ghost {
+        @apply w-full text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 font-medium py-3 px-4 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+    }
+
+    .auth-actions {
+        @apply space-y-3;
+    }
+
+    .auth-links {
+        @apply text-center space-y-2;
+    }
+
+    .auth-link {
+        @apply text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium transition-colors duration-200;
+    }
+
+    .auth-help {
+        @apply mt-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg;
+    }
+
+    .auth-footer {
+        @apply mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 text-center space-y-2;
+    }
+
+    .auth-error {
+        @apply text-sm text-red-600 dark:text-red-400 mt-1;
+    }
+
+    .auth-success {
+        @apply text-sm text-green-600 dark:text-green-400 mt-1;
+    }
+
+    .auth-divider {
+        @apply flex items-center my-6;
+    }
+
+    .auth-divider-line {
+        @apply flex-1 h-px bg-gray-300 dark:bg-gray-600;
+    }
+
+    .auth-divider-text {
+        @apply px-3 text-sm text-gray-500 dark:text-gray-400;
+    }
+
+    /* Form Components */
+    .form-group {
+        @apply space-y-2;
+    }
+
+    .form-label {
+        @apply block text-sm font-medium text-gray-700 dark:text-gray-300;
+    }
+
+    .form-label-required::after {
+        content: ' *';
+        @apply text-red-500;
+    }
+
+    .form-input {
+        @apply w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200;
+    }
+
+    .form-input:focus {
+        @apply shadow-sm;
+    }
+
+    .form-input-error {
+        @apply border-red-500 focus:ring-red-500;
+    }
+
+    .form-input-success {
+        @apply border-green-500 focus:ring-green-500;
+    }
+
+    .form-input-disabled {
+        @apply opacity-50 cursor-not-allowed bg-gray-100 dark:bg-gray-800;
+    }
+
+    .form-textarea {
+        @apply w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 resize-none;
+    }
+
+    .form-select {
+        @apply w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 appearance-none;
+    }
+
+    .form-checkbox {
+        @apply w-4 h-4 text-primary-600 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-primary-500 focus:ring-2 transition-colors duration-200;
+    }
+
+    .form-radio {
+        @apply w-4 h-4 text-primary-600 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-primary-500 focus:ring-2 transition-colors duration-200;
+    }
+
+    .form-error {
+        @apply text-sm text-red-600 dark:text-red-400;
+    }
+
+    .form-help-text {
+        @apply text-sm text-gray-500 dark:text-gray-400;
+    }
+
+    .form-success {
+        @apply text-sm text-green-600 dark:text-green-400;
+    }
+
+    .form-section {
+        @apply space-y-6;
+    }
+
+    .form-section-title {
+        @apply text-lg font-semibold text-gray-900 dark:text-white;
+    }
+
+    .form-section-description {
+        @apply text-sm text-gray-600 dark:text-gray-300;
+    }
+
+    .form-actions {
+        @apply flex items-center justify-end space-x-3;
+    }
+
+    .form-button-primary {
+        @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2.5 px-5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    .form-button-secondary {
+        @apply bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-medium py-2.5 px-5 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+    }
+
+    .form-button-danger {
+        @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    .password-toggle-button {
+        @apply absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200;
+    }
+
+    /* Toast Notification Transitions */
+    .toast-enter-active {
+        transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .toast-enter-from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    .toast-enter-to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .toast-leave-active {
+        transition: all 200ms ease-out;
+    }
+
+    .toast-leave-from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .toast-leave-to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    .toast-move {
+        transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Modal Components */
+    .modal-overlay {
+        @apply fixed inset-0 bg-gray-500/50 dark:bg-gray-900/50 backdrop-blur-sm transition-opacity;
+    }
+
+    .modal-container {
+        @apply flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0 relative;
+    }
+
+    .modal-panel {
+        @apply relative inline-block w-full max-w-2xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 shadow-xl rounded-lg z-50;
+    }
+
+    .modal-panel-lg {
+        @apply max-w-4xl;
+    }
+
+    .modal-panel-sm {
+        @apply max-w-md;
+    }
+
+    .modal-header {
+        @apply mb-6 border-b border-gray-200 dark:border-gray-700 pb-4;
+    }
+
+    .modal-title {
+        @apply text-xl font-semibold text-gray-900 dark:text-white;
+    }
+
+    .modal-subtitle {
+        @apply mt-1 text-sm text-gray-600 dark:text-gray-400;
+    }
+
+    .modal-body {
+        @apply space-y-4;
+    }
+
+    .modal-footer {
+        @apply mt-6 flex items-center justify-end gap-3 border-t border-gray-200 dark:border-gray-700 pt-4;
+    }
+
+    .modal-close-button {
+        @apply text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700;
+    }
+
+    /* Resource Components */
+    .resource-card {
+        @apply bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700;
+    }
+
+    .resource-button-create {
+        @apply px-5 py-2.5 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white rounded-lg font-medium transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow-md;
+    }
+
+    .resource-button-edit {
+        @apply p-1.5 text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded transition-colors duration-150;
+    }
+
+    .resource-button-delete {
+        @apply p-1.5 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors duration-150;
+    }
+
+    /* Tasks Module Components */
+    .btn-primary-sm {
+        @apply bg-primary-600 hover:bg-primary-700 text-white font-medium px-3 py-1.5 text-sm rounded-md transition-all duration-200 shadow-sm hover:shadow inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    .btn-secondary-sm {
+        @apply bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-medium px-3 py-1.5 text-sm rounded-md transition-all duration-200 inline-flex items-center;
+    }
+
+    .btn-success-sm {
+        @apply bg-green-600 hover:bg-green-700 text-white font-medium px-3 py-1.5 text-sm rounded-md transition-all duration-200 shadow-sm hover:shadow inline-flex items-center;
+    }
+
+    .btn-danger {
+        @apply bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    .btn-danger-sm {
+        @apply bg-red-600 hover:bg-red-700 text-white font-medium px-3 py-1.5 text-sm rounded-md transition-all duration-200 shadow-sm hover:shadow inline-flex items-center;
+    }
+
+    /* Dropdown Menu Components */
+    .dropdown-container {
+        @apply absolute z-50 mt-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg;
+    }
+
+    .dropdown-search-container {
+        @apply p-2 border-b border-gray-200 dark:border-gray-600;
+    }
+
+    .dropdown-search-input {
+        @apply w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    }
+
+    .dropdown-option {
+        @apply px-4 py-2.5 cursor-pointer transition-colors duration-150 flex items-center justify-between text-sm;
+    }
+
+    .dropdown-option-hover {
+        @apply hover:bg-gray-100 dark:hover:bg-gray-600;
+    }
+
+    .dropdown-option-selected {
+        @apply bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300;
+    }
+
+    .dropdown-option-icon {
+        @apply w-4 h-4 flex-shrink-0;
+    }
+
+    .dropdown-empty {
+        @apply px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center;
+    }
+
+    .dropdown-footer {
+        @apply border-t border-gray-200 dark:border-gray-600 p-2;
+    }
+
+    /* Status Badge Components */
+    .status-badge {
+        @apply inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full;
+    }
+
+    .status-badge-todo {
+        @apply bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300;
+    }
+
+    .status-badge-in-progress {
+        @apply bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300;
+    }
+
+    .status-badge-review {
+        @apply bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300;
+    }
+
+    .status-badge-done {
+        @apply bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300;
+    }
+
+    /* Priority Badge Components */
+    .priority-badge {
+        @apply inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full;
+    }
+
+    .priority-badge-low {
+        @apply bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300;
+    }
+
+    .priority-badge-medium {
+        @apply bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300;
+    }
+
+    .priority-badge-high {
+        @apply bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300;
+    }
+
+    .priority-badge-urgent {
+        @apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300;
+    }
+}

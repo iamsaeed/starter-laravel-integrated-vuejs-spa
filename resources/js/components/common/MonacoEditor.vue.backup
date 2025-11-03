@@ -1,0 +1,155 @@
+<script setup>
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+import loader from '@monaco-editor/loader'
+
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: ''
+  },
+  language: {
+    type: String,
+    default: 'html'
+  },
+  theme: {
+    type: String,
+    default: 'vs-dark'
+  },
+  height: {
+    type: String,
+    default: '500px'
+  },
+  options: {
+    type: Object,
+    default: () => ({})
+  }
+})
+
+const emit = defineEmits(['update:modelValue', 'change'])
+
+const editorContainer = ref(null)
+let editor = null
+
+onMounted(async () => {
+  const monaco = await loader.init()
+
+  // Register Blade language
+  monaco.languages.register({ id: 'blade' })
+
+  // Define Blade tokenizer
+  monaco.languages.setMonarchTokensProvider('blade', {
+    tokenizer: {
+      root: [
+        // Blade directives
+        [/@(if|elseif|else|endif|unless|endunless|isset|empty|auth|guest|production|env)/, 'keyword'],
+        [/@(foreach|endforeach|forelse|empty|endforelse|for|endfor|while|endwhile)/, 'keyword'],
+        [/@(switch|case|break|default|endswitch)/, 'keyword'],
+        [/@(include|includeIf|includeWhen|includeUnless|includeFirst)/, 'keyword'],
+        [/@(extends|section|endsection|yield|show|parent|push|endpush|prepend|endprepend)/, 'keyword'],
+        [/@(component|endcomponent|slot|endslot)/, 'keyword'],
+        [/@(php|endphp)/, 'keyword.invalid'], // Mark as invalid
+        [/@[a-zA-Z_]\w*/, 'keyword'],
+
+        // Blade echo statements
+        [/\{\{/, 'delimiter.curly', '@bladeEcho'],
+        [/\{!!/, 'delimiter.curly', '@bladeRawEcho'],
+
+        // HTML tags
+        [/<\/?[a-zA-Z][\w-]*/, 'tag'],
+        [/<[a-zA-Z][\w-]*/, 'tag', '@tag'],
+
+        // Strings
+        [/"/, 'string', '@string_double'],
+        [/'/, 'string', '@string_single'],
+      ],
+
+      bladeEcho: [
+        [/\}\}/, 'delimiter.curly', '@pop'],
+        [/[^}]+/, 'variable']
+      ],
+
+      bladeRawEcho: [
+        [/!!\}/, 'delimiter.curly', '@pop'],
+        [/[^!}]+/, 'variable']
+      ],
+
+      tag: [
+        [/[ \t\r\n]+/, ''],
+        [/[a-zA-Z][\w-]*/, 'attribute.name'],
+        [/=/, 'delimiter'],
+        [/"[^"]*"/, 'attribute.value'],
+        [/'[^']*'/, 'attribute.value'],
+        [/>/, 'tag', '@pop'],
+      ],
+
+      string_double: [
+        [/[^\\"]+/, 'string'],
+        [/"/, 'string', '@pop']
+      ],
+
+      string_single: [
+        [/[^\\']+/, 'string'],
+        [/'/, 'string', '@pop']
+      ],
+    }
+  })
+
+  // Create editor instance
+  editor = monaco.editor.create(editorContainer.value, {
+    value: props.modelValue,
+    language: props.language === 'blade' ? 'blade' : props.language,
+    theme: props.theme,
+    automaticLayout: true,
+    minimap: { enabled: true },
+    fontSize: 14,
+    lineNumbers: 'on',
+    wordWrap: 'on',
+    scrollBeyondLastLine: false,
+    folding: true,
+    ...props.options
+  })
+
+  // Listen for content changes
+  editor.onDidChangeModelContent(() => {
+    const value = editor.getValue()
+    emit('update:modelValue', value)
+    emit('change', value)
+  })
+})
+
+// Watch for external changes to modelValue
+watch(() => props.modelValue, (newValue) => {
+  if (editor && newValue !== editor.getValue()) {
+    editor.setValue(newValue || '')
+  }
+})
+
+// Cleanup
+onBeforeUnmount(() => {
+  if (editor) {
+    editor.dispose()
+  }
+})
+
+// Expose editor instance for parent components
+defineExpose({
+  getEditor: () => editor,
+  insertText: (text) => {
+    if (editor) {
+      const selection = editor.getSelection()
+      editor.executeEdits('', [{
+        range: selection,
+        text: text
+      }])
+    }
+  }
+})
+</script>
+
+<template>
+  <div
+    ref="editorContainer"
+    :style="{ height }"
+    class="border border-gray-300 dark:border-gray-600 rounded-md overflow-hidden"
+  />
+</template>

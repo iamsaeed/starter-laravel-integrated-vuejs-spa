@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OceanFlow - AI-Powered Workspace Platform</title>
+    <meta name="description" content="Transform your team collaboration with AI-powered workspaces. Manage projects, track expenses, and leverage intelligent agents for enhanced productivity.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Light Mode - Vibrant Gradient Theme */
+            --primary-purple: #8B5CF6;
+            --primary-pink: #EC4899;
+            --primary-orange: #F59E0B;
+            --accent-blue: #3B82F6;
+            --accent-green: #10B981;
+            
+            /* Text Colors */
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --text-light: #9CA3AF;
+            
+            /* Background */
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F9FAFB;
+            --bg-card: #FFFFFF;
+            
+            /* Gradients */
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Mode - Neon Cyberpunk Theme */
+            --primary-purple: #A78BFA;
+            --primary-pink: #F472B6;
+            --primary-orange: #FBBF24;
+            --accent-blue: #60A5FA;
+            --accent-green: #34D399;
+            
+            /* Text Colors */
+            --text-primary: #F9FAFB;
+            --text-secondary: #D1D5DB;
+            --text-light: #9CA3AF;
+            
+            /* Background */
+            --bg-primary: #0F172A;
+            --bg-secondary: #1E293B;
+            --bg-card: #1E293B;
+            
+            /* Gradients */
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* Geometric Background Pattern */
+        .geometric-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            opacity: 0.05;
+        }
+
+        .geometric-bg::before,
+        .geometric-bg::after {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            background: var(--gradient-1);
+            animation: morph 8s ease-in-out infinite;
+        }
+
+        .geometric-bg::before {
+            top: -300px;
+            right: -300px;
+        }
+
+        .geometric-bg::after {
+            bottom: -300px;
+            left: -300px;
+            animation-delay: 4s;
+        }
+
+        @keyframes morph {
+            0%, 100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+            25% { border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%; }
+            50% { border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%; }
+            75% { border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] nav {
+            background: rgba(15, 23, 42, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        nav.scrolled {
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            background: var(--gradient-1);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 100px;
+            padding: 8rem 2rem 6rem;
+            text-align: center;
+            position: relative;
+            background: var(--gradient-hero);
+            color: white;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+            animation: slideInDown 1s ease;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero p {
+            font-size: 1.35rem;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            opacity: 0.95;
+            font-weight: 400;
+            animation: slideInUp 1s ease 0.2s backwards;
+            line-height: 1.8;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: slideInUp 1s ease 0.4s backwards;
+        }
+
+        .btn {
+            padding: 1.25rem 3rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 8rem 2rem;
+            background: var(--bg-primary);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            padding: 3rem;
+            border-radius: 24px;
+            border: 2px solid transparent;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 24px;
+            padding: 2px;
+            background: var(--gradient-1);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:nth-child(2)::before { background: var(--gradient-2); }
+        .feature-card:nth-child(3)::before { background: var(--gradient-3); }
+        .feature-card:nth-child(4)::before { background: var(--gradient-4); }
+        .feature-card:nth-child(5)::before { background: var(--gradient-1); }
+        .feature-card:nth-child(6)::before { background: var(--gradient-2); }
+        .feature-card:nth-child(7)::before { background: var(--gradient-3); }
+        .feature-card:nth-child(8)::before { background: var(--gradient-4); }
+        .feature-card:nth-child(9)::before { background: var(--gradient-1); }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-card:nth-child(2) .feature-icon { background: var(--gradient-2); }
+        .feature-card:nth-child(3) .feature-icon { background: var(--gradient-3); }
+        .feature-card:nth-child(4) .feature-icon { background: var(--gradient-4); }
+        .feature-card:nth-child(5) .feature-icon { background: var(--gradient-1); }
+        .feature-card:nth-child(6) .feature-icon { background: var(--gradient-2); }
+        .feature-card:nth-child(7) .feature-icon { background: var(--gradient-3); }
+        .feature-card:nth-child(8) .feature-icon { background: var(--gradient-4); }
+        .feature-card:nth-child(9) .feature-icon { background: var(--gradient-1); }
+
+        .feature-card h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        /* AI Agents Section */
+        .ai-agents {
+            padding: 8rem 2rem;
+            background: var(--bg-secondary);
+            position: relative;
+        }
+
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .agent-tag {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .agent-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-1);
+            transition: left 0.5s ease;
+            z-index: 0;
+        }
+
+        .agent-tag:nth-child(2)::before { background: var(--gradient-2); }
+        .agent-tag:nth-child(3)::before { background: var(--gradient-3); }
+        .agent-tag:nth-child(4)::before { background: var(--gradient-4); }
+        .agent-tag:nth-child(5)::before { background: var(--gradient-1); }
+        .agent-tag:nth-child(6)::before { background: var(--gradient-2); }
+        .agent-tag:nth-child(7)::before { background: var(--gradient-3); }
+        .agent-tag:nth-child(8)::before { background: var(--gradient-4); }
+        .agent-tag:nth-child(9)::before { background: var(--gradient-1); }
+        .agent-tag:nth-child(10)::before { background: var(--gradient-2); }
+        .agent-tag:nth-child(11)::before { background: var(--gradient-3); }
+        .agent-tag:nth-child(12)::before { background: var(--gradient-4); }
+
+        .agent-tag:hover::before {
+            left: 0;
+        }
+
+        .agent-tag span {
+            font-weight: 700;
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+            transition: color 0.3s ease;
+        }
+
+        .agent-tag:hover {
+            transform: scale(1.08) rotate(2deg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .agent-tag:hover span {
+            color: white;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 8rem 2rem;
+            background: var(--bg-primary);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 4rem auto 0;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            padding: 3rem 2.5rem;
+            border-radius: 32px;
+            border: 2px solid transparent;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: visible;
+            box-shadow: var(--shadow-md);
+        }
+
+        .pricing-card.featured {
+            background: var(--gradient-1);
+            color: white;
+            transform: scale(1.08);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .pricing-card.featured * {
+            color: white;
+        }
+
+        .pricing-card.featured::before {
+            content: '⭐ MOST POPULAR';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: #667eea;
+            padding: 0.5rem 2rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .pricing-card.featured:hover {
+            transform: translateY(-12px) scale(1.1);
+        }
+
+        .pricing-card h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .price {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            letter-spacing: -2px;
+        }
+
+        .pricing-card:not(.featured) .price {
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .price-period {
+            color: var(--text-light);
+            margin-bottom: 2.5rem;
+            font-size: 1rem;
+        }
+
+        .pricing-card.featured .price-period {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 2.5rem;
+            text-align: left;
+        }
+
+        .feature-list li {
+            padding: 1rem 0;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            font-size: 1.05rem;
+        }
+
+        .pricing-card.featured .feature-list li {
+            color: rgba(255, 255, 255, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            color: var(--accent-green);
+            font-weight: 900;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .pricing-card.featured .feature-list li:before {
+            color: white;
+        }
+
+        /* Signup Form */
+        .signup-section {
+            padding: 8rem 2rem;
+            background: var(--bg-secondary);
+        }
+
+        .signup-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            padding: 4rem;
+            border-radius: 32px;
+            box-shadow: var(--shadow-lg);
+            border: 2px solid transparent;
+            background-image: linear-gradient(var(--bg-card), var(--bg-card)), var(--gradient-hero);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 1.25rem 1.5rem;
+            border-radius: 16px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        [data-theme="dark"] .form-group input,
+        [data-theme="dark"] .form-group select {
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            background: var(--bg-card);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            padding: 4rem 2rem 2rem;
+            border-top: 2px solid rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="dark"] footer {
+            border-top: 2px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h4 {
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-purple);
+            padding-left: 5px;
+        }
+
+        .copyright {
+            border-top: 2px solid rgba(0, 0, 0, 0.05);
+            padding-top: 2rem;
+            text-align: center;
+            color: var(--text-light);
+        }
+
+        [data-theme="dark"] .copyright {
+            border-top: 2px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Animations */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: var(--gradient-4);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-top: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+            animation: slideInUp 0.5s ease;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            border: 4px solid rgba(102, 126, 234, 0.2);
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 1.5rem auto 0;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .spinner.show {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .feature-grid,
+            .agents-grid,
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .signup-form {
+                padding: 2.5rem 1.5rem;
+            }
+        }
+
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Geometric Background -->
+    <div class="geometric-bg"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span>🌊</span> OceanFlow
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#ai-agents">AI Agents</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#signup">Get Started</a>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span id="theme-icon">🌙 Dark</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>AI-Powered Workspace Platform</h1>
+            <p>Transform your team collaboration with intelligent workspaces. Manage projects, track expenses, and leverage 12 specialized AI agents for enhanced productivity.</p>
+            <div class="cta-buttons">
+                <a href="#signup" class="btn btn-primary">Start Free Trial</a>
+                <a href="#features" class="btn btn-secondary">Explore Features</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Powerful Features for Modern Teams</h2>
+            <p class="section-subtitle">Everything you need to supercharge your team's productivity</p>
+            <div class="feature-grid">
+                <div class="feature-card reveal">
+                    <div class="feature-icon">🤖</div>
+                    <h3>12 AI Agents</h3>
+                    <p>Specialized AI agents for conversation, research, analysis, email drafting, code generation, and more. Each agent optimized for specific tasks.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">🏢</div>
+                    <h3>Multi-Tenant Workspaces</h3>
+                    <p>Create isolated workspaces for different teams or clients. Each workspace has its own database for complete data security.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">💼</div>
+                    <h3>Project Management</h3>
+                    <p>Track projects, tasks, sprints, and team assignments. Streamline your workflow with intelligent task management.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">💰</div>
+                    <h3>Expense Tracking</h3>
+                    <p>Monitor expenses with AI-powered categorization and analysis. Get insights into spending patterns and optimize budgets.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">🔐</div>
+                    <h3>Advanced Security</h3>
+                    <p>Role-based access control, encrypted data storage, and workspace-level isolation ensure your data stays secure.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Real-Time Collaboration</h3>
+                    <p>Work together seamlessly with team members. Instant notifications, comments, and updates keep everyone in sync.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Customizable Interface</h3>
+                    <p>Multiple layouts, themes, and personalization options. Make the platform work exactly how you want it to.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">📊</div>
+                    <h3>Analytics & Insights</h3>
+                    <p>Powerful reporting and analytics tools to track progress, identify trends, and make data-driven decisions.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">🔌</div>
+                    <h3>API Integration</h3>
+                    <p>Bring your own AI provider keys. Support for OpenAI, Anthropic, Gemini, DeepSeek, and more.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Agents Section -->
+    <section id="ai-agents" class="ai-agents">
+        <div class="container">
+            <h2 class="section-title">12 Specialized AI Agents</h2>
+            <p class="section-subtitle">
+                Each agent is expertly trained for specific tasks, providing intelligent assistance across your entire workflow.
+            </p>
+            <div class="agents-grid">
+                <div class="agent-tag reveal"><span>💬 Conversation Agent</span></div>
+                <div class="agent-tag reveal"><span>💰 Expense Agent</span></div>
+                <div class="agent-tag reveal"><span>🔬 Research Agent</span></div>
+                <div class="agent-tag reveal"><span>📊 Analysis Agent</span></div>
+                <div class="agent-tag reveal"><span>✉️ Email Drafting Agent</span></div>
+                <div class="agent-tag reveal"><span>📝 Blog Writing Agent</span></div>
+                <div class="agent-tag reveal"><span>🔍 Search Engine Agent</span></div>
+                <div class="agent-tag reveal"><span>🎨 Email Design Agent</span></div>
+                <div class="agent-tag reveal"><span>💻 Code Agent</span></div>
+                <div class="agent-tag reveal"><span>🏢 Workspace Agent</span></div>
+                <div class="agent-tag reveal"><span>🧩 Module Agent</span></div>
+                <div class="agent-tag reveal"><span>🎯 Supervisor Agent</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <h2 class="section-title">Simple, Transparent Pricing</h2>
+            <p class="section-subtitle">Choose the perfect plan for your team</p>
+            <div class="pricing-grid">
+                <div class="pricing-card reveal">
+                    <h3>Starter</h3>
+                    <div class="price">$29</div>
+                    <div class="price-period">per workspace / month</div>
+                    <ul class="feature-list">
+                        <li>1 Workspace</li>
+                        <li>Up to 5 Team Members</li>
+                        <li>10 Projects</li>
+                        <li>Basic AI Agents Access</li>
+                        <li>5,000 AI Requests/month</li>
+                        <li>Email Support</li>
+                        <li>10GB Storage</li>
+                    </ul>
+                    <button class="btn btn-secondary" onclick="selectPlan('starter')">Get Started</button>
+                </div>
+
+                <div class="pricing-card featured reveal">
+                    <h3>Professional</h3>
+                    <div class="price">$79</div>
+                    <div class="price-period">per workspace / month</div>
+                    <ul class="feature-list">
+                        <li>3 Workspaces</li>
+                        <li>Up to 20 Team Members</li>
+                        <li>Unlimited Projects</li>
+                        <li>All 12 AI Agents</li>
+                        <li>50,000 AI Requests/month</li>
+                        <li>Priority Support</li>
+                        <li>100GB Storage</li>
+                        <li>Custom Roles & Permissions</li>
+                        <li>Advanced Analytics</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="selectPlan('professional')">Get Started</button>
+                </div>
+
+                <div class="pricing-card reveal">
+                    <h3>Enterprise</h3>
+                    <div class="price">Custom</div>
+                    <div class="price-period">contact us for pricing</div>
+                    <ul class="feature-list">
+                        <li>Unlimited Workspaces</li>
+                        <li>Unlimited Team Members</li>
+                        <li>Unlimited Projects</li>
+                        <li>All AI Agents + Custom Training</li>
+                        <li>Unlimited AI Requests</li>
+                        <li>24/7 Dedicated Support</li>
+                        <li>Unlimited Storage</li>
+                        <li>Custom Integrations</li>
+                        <li>SLA Guarantee</li>
+                        <li>On-Premise Deployment</li>
+                    </ul>
+                    <button class="btn btn-secondary" onclick="contactSales()">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Signup Section -->
+    <section id="signup" class="signup-section">
+        <div class="container">
+            <h2 class="section-title">Start Your Free Trial Today</h2>
+            <p class="section-subtitle">No credit card required • Cancel anytime</p>
+            <form class="signup-form" id="signupForm" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="john@company.com">
+                </div>
+                <div class="form-group">
+                    <label for="company">Company Name</label>
+                    <input type="text" id="company" name="company" placeholder="Your Company">
+                </div>
+                <div class="form-group">
+                    <label for="plan">Select Plan</label>
+                    <select id="plan" name="plan" required>
+                        <option value="">Choose a plan</option>
+                        <option value="starter">Starter - $29/month</option>
+                        <option value="professional">Professional - $79/month</option>
+                        <option value="enterprise">Enterprise - Custom</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Start Free 14-Day Trial
+                </button>
+                <div class="spinner" id="spinner"></div>
+                <div class="success-message" id="successMessage">
+                    🎉 Thank you! We'll send you an email with setup instructions shortly.
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#ai-agents">AI Agents</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#signup">Get Started</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#careers">Careers</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#docs">Documentation</a></li>
+                    <li><a href="#api">API Reference</a></li>
+                    <li><a href="#tutorials">Tutorials</a></li>
+                    <li><a href="#support">Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                    <li><a href="#terms">Terms of Service</a></li>
+                    <li><a href="#security">Security</a></li>
+                    <li><a href="#compliance">Compliance</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>© 2025 OceanFlow. All rights reserved. Built with ❤️ for modern teams.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('theme-icon');
+            const currentTheme = html.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                html.removeAttribute('data-theme');
+                themeIcon.textContent = '🌙 Dark';
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️ Light';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️ Light';
+            }
+
+            // Navbar scroll effect
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Scroll reveal animation
+            const reveals = document.querySelectorAll('.reveal');
+            
+            function revealOnScroll() {
+                reveals.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (elementTop < windowHeight - 100) {
+                        element.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', revealOnScroll);
+            revealOnScroll(); // Initial check
+        });
+
+        // Select Plan
+        function selectPlan(plan) {
+            document.getElementById('plan').value = plan;
+            document.getElementById('signup').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Contact Sales
+        function contactSales() {
+            alert('Thank you for your interest! Our sales team will contact you shortly.\n\nEmail: sales@oceanflow.io\nPhone: +1 (555) 123-4567');
+        }
+
+        // Handle Signup Form
+        function handleSignup(event) {
+            event.preventDefault();
+            
+            const form = document.getElementById('signupForm');
+            const spinner = document.getElementById('spinner');
+            const successMessage = document.getElementById('successMessage');
+            const submitButton = form.querySelector('button[type="submit"]');
+            
+            // Show spinner
+            submitButton.style.display = 'none';
+            spinner.classList.add('show');
+            
+            // Simulate API call
+            setTimeout(function() {
+                spinner.classList.remove('show');
+                successMessage.classList.add('show');
+                
+                // Reset form
+                form.reset();
+                
+                // Hide success message after 5 seconds
+                setTimeout(function() {
+                    successMessage.classList.remove('show');
+                    submitButton.style.display = 'block';
+                }, 5000);
+            }, 2000);
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

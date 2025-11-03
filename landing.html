@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OceanFlow - AI-Powered Workspace Platform</title>
+    <meta name="description" content="Transform your team collaboration with AI-powered workspaces. Manage projects, track expenses, and leverage intelligent agents for enhanced productivity.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Light Mode - Ocean Theme */
+            --ocean-deep: #0A2540;
+            --ocean-blue: #1E3A8A;
+            --ocean-cyan: #06B6D4;
+            --ocean-teal: #14B8A6;
+            --ocean-light: #E0F2FE;
+            --ocean-foam: #CFFAFE;
+            --coral: #F97316;
+            --sand: #FEF3C7;
+            
+            /* Text Colors */
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-light: #94A3B8;
+            
+            /* Background */
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --bg-card: #FFFFFF;
+            
+            /* Accents */
+            --accent-gradient: linear-gradient(135deg, #06B6D4 0%, #1E3A8A 100%);
+            --wave-color: rgba(6, 182, 212, 0.1);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Mode - Deep Ocean Theme */
+            --ocean-deep: #0A1929;
+            --ocean-blue: #1E40AF;
+            --ocean-cyan: #22D3EE;
+            --ocean-teal: #2DD4BF;
+            --ocean-light: #1E293B;
+            --ocean-foam: #334155;
+            --coral: #FB923C;
+            --sand: #FCD34D;
+            
+            /* Text Colors */
+            --text-primary: #F1F5F9;
+            --text-secondary: #CBD5E1;
+            --text-light: #94A3B8;
+            
+            /* Background */
+            --bg-primary: #0F172A;
+            --bg-secondary: #1E293B;
+            --bg-card: #1E293B;
+            
+            /* Accents */
+            --accent-gradient: linear-gradient(135deg, #22D3EE 0%, #3B82F6 100%);
+            --wave-color: rgba(34, 211, 238, 0.05);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* Animated Wave Background */
+        .wave-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .wave {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, var(--wave-color) 0%, transparent 70%);
+            animation: wave 20s infinite linear;
+        }
+
+        .wave:nth-child(2) {
+            animation: wave 15s infinite linear reverse;
+            opacity: 0.5;
+        }
+
+        .wave:nth-child(3) {
+            animation: wave 25s infinite linear;
+            opacity: 0.3;
+        }
+
+        @keyframes wave {
+            0% { transform: translate(-25%, -25%) rotate(0deg); }
+            100% { transform: translate(-25%, -25%) rotate(360deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--ocean-light);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--ocean-cyan);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 2px solid var(--ocean-cyan);
+            color: var(--ocean-cyan);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--ocean-cyan);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            animation: fadeInUp 1s ease 0.2s backwards;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease 0.4s backwards;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 3rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--ocean-cyan);
+            color: var(--ocean-cyan);
+        }
+
+        .btn-secondary:hover {
+            background: var(--ocean-cyan);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 2rem;
+            background: var(--bg-secondary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: var(--text-primary);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid var(--ocean-light);
+            transition: all 0.3s ease;
+            animation: fadeIn 1s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.2);
+            border-color: var(--ocean-cyan);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--accent-gradient);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* AI Agents Section */
+        .ai-agents {
+            padding: 6rem 2rem;
+        }
+
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .agent-tag {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid var(--ocean-light);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .agent-tag:hover {
+            background: var(--accent-gradient);
+            color: white;
+            transform: scale(1.05);
+            border-color: transparent;
+        }
+
+        .agent-tag span {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 6rem 2rem;
+            background: var(--bg-secondary);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            padding: 3rem 2rem;
+            border-radius: 1.5rem;
+            border: 2px solid var(--ocean-light);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--ocean-cyan);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: 'POPULAR';
+            position: absolute;
+            top: 1rem;
+            right: -2rem;
+            background: var(--accent-gradient);
+            color: white;
+            padding: 0.5rem 3rem;
+            transform: rotate(45deg);
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(6, 182, 212, 0.3);
+        }
+
+        .pricing-card h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-period {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .feature-list li {
+            padding: 0.75rem 0;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--ocean-light);
+        }
+
+        .feature-list li:before {
+            content: "✓ ";
+            color: var(--ocean-cyan);
+            font-weight: 700;
+            margin-right: 0.5rem;
+        }
+
+        /* Signup Form */
+        .signup-section {
+            padding: 6rem 2rem;
+        }
+
+        .signup-form {
+            max-width: 500px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            padding: 3rem;
+            border-radius: 1.5rem;
+            border: 1px solid var(--ocean-light);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            border: 2px solid var(--ocean-light);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--ocean-cyan);
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--ocean-deep);
+            color: var(--text-light);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            color: var(--ocean-cyan);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--ocean-cyan);
+        }
+
+        .copyright {
+            border-top: 1px solid var(--ocean-light);
+            padding-top: 2rem;
+            color: var(--text-light);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating Animation */
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: var(--ocean-teal);
+            color: white;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-top: 1rem;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            border: 3px solid var(--ocean-light);
+            border-top: 3px solid var(--ocean-cyan);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .spinner.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Wave Background -->
+    <div class="wave-bg">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span>🌊</span> OceanFlow
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#ai-agents">AI Agents</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#signup">Get Started</a>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span id="theme-icon">🌙</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>AI-Powered Workspace Platform</h1>
+        <p>Transform your team collaboration with intelligent workspaces. Manage projects, track expenses, and leverage 12 specialized AI agents for enhanced productivity.</p>
+        <div class="cta-buttons">
+            <a href="#signup" class="btn btn-primary">Start Free Trial</a>
+            <a href="#features" class="btn btn-secondary">Explore Features</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Powerful Features for Modern Teams</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>12 AI Agents</h3>
+                    <p>Specialized AI agents for conversation, research, analysis, email drafting, code generation, and more. Each agent optimized for specific tasks.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏢</div>
+                    <h3>Multi-Tenant Workspaces</h3>
+                    <p>Create isolated workspaces for different teams or clients. Each workspace has its own database for complete data security.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💼</div>
+                    <h3>Project Management</h3>
+                    <p>Track projects, tasks, sprints, and team assignments. Streamline your workflow with intelligent task management.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Expense Tracking</h3>
+                    <p>Monitor expenses with AI-powered categorization and analysis. Get insights into spending patterns and optimize budgets.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h3>Advanced Security</h3>
+                    <p>Role-based access control, encrypted data storage, and workspace-level isolation ensure your data stays secure.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Real-Time Collaboration</h3>
+                    <p>Work together seamlessly with team members. Instant notifications, comments, and updates keep everyone in sync.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Customizable Interface</h3>
+                    <p>Multiple layouts, themes, and personalization options. Make the platform work exactly how you want it to.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Analytics & Insights</h3>
+                    <p>Powerful reporting and analytics tools to track progress, identify trends, and make data-driven decisions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔌</div>
+                    <h3>API Integration</h3>
+                    <p>Bring your own AI provider keys. Support for OpenAI, Anthropic, Gemini, DeepSeek, and more.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Agents Section -->
+    <section id="ai-agents" class="ai-agents">
+        <div class="container">
+            <h2 class="section-title">12 Specialized AI Agents</h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+                Each agent is expertly trained for specific tasks, providing intelligent assistance across your entire workflow.
+            </p>
+            <div class="agents-grid">
+                <div class="agent-tag"><span>💬 Conversation Agent</span></div>
+                <div class="agent-tag"><span>💰 Expense Agent</span></div>
+                <div class="agent-tag"><span>🔬 Research Agent</span></div>
+                <div class="agent-tag"><span>📊 Analysis Agent</span></div>
+                <div class="agent-tag"><span>✉️ Email Drafting Agent</span></div>
+                <div class="agent-tag"><span>📝 Blog Writing Agent</span></div>
+                <div class="agent-tag"><span>🔍 Search Engine Agent</span></div>
+                <div class="agent-tag"><span>🎨 Email Design Agent</span></div>
+                <div class="agent-tag"><span>💻 Code Agent</span></div>
+                <div class="agent-tag"><span>🏢 Workspace Agent</span></div>
+                <div class="agent-tag"><span>🧩 Module Agent</span></div>
+                <div class="agent-tag"><span>🎯 Supervisor Agent</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <h2 class="section-title">Simple, Transparent Pricing</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Starter</h3>
+                    <div class="price">$29</div>
+                    <div class="price-period">per workspace / month</div>
+                    <ul class="feature-list">
+                        <li>1 Workspace</li>
+                        <li>Up to 5 Team Members</li>
+                        <li>10 Projects</li>
+                        <li>Basic AI Agents Access</li>
+                        <li>5,000 AI Requests/month</li>
+                        <li>Email Support</li>
+                        <li>10GB Storage</li>
+                    </ul>
+                    <button class="btn btn-secondary" onclick="selectPlan('starter')">Get Started</button>
+                </div>
+
+                <div class="pricing-card featured">
+                    <h3>Professional</h3>
+                    <div class="price">$79</div>
+                    <div class="price-period">per workspace / month</div>
+                    <ul class="feature-list">
+                        <li>3 Workspaces</li>
+                        <li>Up to 20 Team Members</li>
+                        <li>Unlimited Projects</li>
+                        <li>All 12 AI Agents</li>
+                        <li>50,000 AI Requests/month</li>
+                        <li>Priority Support</li>
+                        <li>100GB Storage</li>
+                        <li>Custom Roles & Permissions</li>
+                        <li>Advanced Analytics</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="selectPlan('professional')">Get Started</button>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="price">Custom</div>
+                    <div class="price-period">contact us for pricing</div>
+                    <ul class="feature-list">
+                        <li>Unlimited Workspaces</li>
+                        <li>Unlimited Team Members</li>
+                        <li>Unlimited Projects</li>
+                        <li>All AI Agents + Custom Training</li>
+                        <li>Unlimited AI Requests</li>
+                        <li>24/7 Dedicated Support</li>
+                        <li>Unlimited Storage</li>
+                        <li>Custom Integrations</li>
+                        <li>SLA Guarantee</li>
+                        <li>On-Premise Deployment</li>
+                    </ul>
+                    <button class="btn btn-secondary" onclick="contactSales()">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Signup Section -->
+    <section id="signup" class="signup-section">
+        <div class="container">
+            <h2 class="section-title">Start Your Free Trial Today</h2>
+            <form class="signup-form" id="signupForm" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="john@company.com">
+                </div>
+                <div class="form-group">
+                    <label for="company">Company Name</label>
+                    <input type="text" id="company" name="company" placeholder="Your Company">
+                </div>
+                <div class="form-group">
+                    <label for="plan">Select Plan</label>
+                    <select id="plan" name="plan" required>
+                        <option value="">Choose a plan</option>
+                        <option value="starter">Starter - $29/month</option>
+                        <option value="professional">Professional - $79/month</option>
+                        <option value="enterprise">Enterprise - Custom</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Start Free 14-Day Trial
+                </button>
+                <div class="spinner" id="spinner"></div>
+                <div class="success-message" id="successMessage">
+                    🎉 Thank you! We'll send you an email with setup instructions shortly.
+                </div>
+                <p style="text-align: center; color: var(--text-light); margin-top: 1rem; font-size: 0.875rem;">
+                    No credit card required • Cancel anytime
+                </p>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#ai-agents">AI Agents</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#signup">Get Started</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#careers">Careers</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#docs">Documentation</a></li>
+                    <li><a href="#api">API Reference</a></li>
+                    <li><a href="#tutorials">Tutorials</a></li>
+                    <li><a href="#support">Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                    <li><a href="#terms">Terms of Service</a></li>
+                    <li><a href="#security">Security</a></li>
+                    <li><a href="#compliance">Compliance</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>© 2025 OceanFlow. All rights reserved. Built with ❤️ for modern teams.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('theme-icon');
+            const currentTheme = html.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                html.removeAttribute('data-theme');
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+            }
+
+            // Navbar scroll effect
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+        });
+
+        // Select Plan
+        function selectPlan(plan) {
+            document.getElementById('plan').value = plan;
+            document.getElementById('signup').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Contact Sales
+        function contactSales() {
+            alert('Thank you for your interest! Our sales team will contact you shortly.\n\nEmail: sales@oceanflow.io\nPhone: +1 (555) 123-4567');
+        }
+
+        // Handle Signup Form
+        function handleSignup(event) {
+            event.preventDefault();
+            
+            const form = document.getElementById('signupForm');
+            const spinner = document.getElementById('spinner');
+            const successMessage = document.getElementById('successMessage');
+            const submitButton = form.querySelector('button[type="submit"]');
+            
+            // Show spinner
+            submitButton.style.display = 'none';
+            spinner.classList.add('show');
+            
+            // Simulate API call
+            setTimeout(function() {
+                spinner.classList.remove('show');
+                successMessage.classList.add('show');
+                
+                // Reset form
+                form.reset();
+                
+                // Hide success message after 5 seconds
+                setTimeout(function() {
+                    successMessage.classList.remove('show');
+                    submitButton.style.display = 'block';
+                }, 5000);
+                
+                // In production, this would send data to your Laravel backend:
+                // const formData = new FormData(form);
+                // fetch('/api/signup', {
+                //     method: 'POST',
+                //     body: formData,
+                //     headers: {
+                //         'Accept': 'application/json',
+                //     }
+                // })
+                // .then(response => response.json())
+                // .then(data => {
+                //     console.log('Success:', data);
+                // });
+            }, 2000);
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

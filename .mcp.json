@@ -1,0 +1,12 @@
+{
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "wsl",
+            "args": [
+                "/usr/bin/php8.2",
+                "/home/ahmad/www/starters/starter-october-2025/artisan",
+                "boost:mcp"
+            ]
+        }
+    }
+}
