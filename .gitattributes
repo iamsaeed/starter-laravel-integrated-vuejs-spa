@@ -9,3 +9,32 @@
 /.github export-ignore
 CHANGELOG.md export-ignore
 .styleci.yml export-ignore
+
+# Smart Merging Strategy for Laravel Vue Starter
+# Protects project-specific files during updates
+
+# Environment files - always keep yours
+.env merge=ours
+.env.example merge=ours
+
+# Project-specific resources - keep yours
+app/Resources/UserResource.php merge=ours
+app/Resources/RoleResource.php merge=ours
+app/Resources/CountryResource.php merge=ours
+app/Resources/TimezoneResource.php merge=ours
+
+# Routes - manual merge
+routes/api.php merge=union
+routes/web.php merge=union
+
+# Migrations - always keep yours
+database/migrations/* merge=ours
+
+# Seeders - manual merge
+database/seeders/* merge=union
+
+# Config - manual merge
+config/* merge=union
+
+# Project-specific docs
+README.md merge=ours

@@ -1,11 +1,237 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Vue Starter Template
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A production-ready Laravel 12 + Vue 3 SPA starter template with a powerful Resource CRUD system, comprehensive authentication, and modern development tooling.
+
+## 🚀 Quick Start
+
+### Using GitHub Template (Recommended)
+
+1. Click "Use this template" on GitHub
+2. Clone your new repository
+3. Run setup:
+
+```bash
+cd your-project
+git remote add starter git@github.com:your-org/laravel-vue-starter.git
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+composer run dev
+```
+
+### Manual Setup
+
+```bash
+# Clone and setup
+git clone git@github.com:your-org/laravel-vue-starter.git my-project
+cd my-project
+./.starter/setup.sh
+
+# Install and run
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+composer run dev
+```
+
+📖 **Full documentation:** [.starter/USAGE.md](.starter/USAGE.md)
+
+## ✨ Features
+
+### Resource CRUD System
+- **Laravel Nova-inspired** automatic CRUD system
+- Define resources with Fields, Filters, and Actions
+- Auto-generated API endpoints, forms, and tables
+- Built-in field types: Text, Select, Number, Boolean, Date, Image, BelongsToMany, etc.
+- Customizable filters and bulk actions
+
+### Authentication & Authorization
+- Laravel Sanctum SPA authentication
+- Role-based permissions
+- User management resource
+
+### Frontend (Vue 3)
+- Modern Vue 3 Composition API
+- Pinia state management
+- Vue Router with named routes
+- Tailwind CSS 4
+- Reusable form components
+- VeeValidate form validation
+- TipTap WYSIWYG editor
+- Monaco code editor
+
+### Backend (Laravel 12)
+- Service-oriented architecture
+- Spatie Media Library integration
+- Laravel Boost for performance
+- Comprehensive testing setup
+- Scheduled tasks and queues
+
+### Developer Experience
+- Hot Module Replacement (HMR)
+- Laravel Pint code formatting
+- Comprehensive test suites (PHPUnit, Vitest, Playwright)
+- Development helper scripts
+- Detailed documentation
+
+## 📦 Tech Stack
+
+**Backend:**
+- Laravel 12
+- PHP 8.2
+- MySQL
+- Laravel Sanctum
+- Spatie Media Library
+- Laravel Boost
+
+**Frontend:**
+- Vue 3
+- Pinia
+- Vue Router
+- Vite
+- Tailwind CSS 4
+- VeeValidate
+- TipTap Editor
+
+**Testing:**
+- PHPUnit (Backend)
+- Vitest (Frontend Unit/Integration)
+- Playwright (E2E)
+
+**Payments:**
+- Stripe
+- Razorpay
+- Laravel Cashier
+
+## 🔄 Receiving Updates
+
+This starter template can receive updates even after you've started your project:
+
+```bash
+# Automated update
+./.starter/update.sh
+
+# Manual update
+git fetch starter
+git merge starter/main
+```
+
+The `.gitattributes` file protects your custom code during updates. See [.starter/USAGE.md](.starter/USAGE.md) for details.
+
+## 📝 Documentation
+
+- **Quick Start:** [.starter/USAGE.md](.starter/USAGE.md)
+- **Resource CRUD System:** [project_development_guidelines/resource-crud-system.md](project_development_guidelines/resource-crud-system.md)
+- **Backend Guidelines:** [project_development_guidelines/backend.md](project_development_guidelines/backend.md)
+- **Frontend Guidelines:** [project_development_guidelines/frontend.md](project_development_guidelines/frontend.md)
+- **Settings System:** [project_development_guidelines/settings.md](project_development_guidelines/settings.md)
+- **Email Templates:** [project_development_guidelines/features/email-templates.md](project_development_guidelines/features/email-templates.md)
+- **Testing Guide:** [project_development_guidelines/testing.md](project_development_guidelines/testing.md)
+
+## 🛠️ Development Commands
+
+```bash
+# Start development server with all services
+composer run dev
+
+# Run tests
+composer run test          # Backend tests
+npm run test              # Frontend tests
+npm run test:e2e          # E2E tests
+
+# Code formatting
+vendor/bin/pint --dirty   # Format PHP code
+
+# Database
+php artisan app:reset     # Reset database with fresh data
+php artisan migrate:fresh --seed
+
+# Build for production
+npm run build
+```
+
+## 📁 Project Structure
+
+```
+├── app/
+│   ├── Resources/           # Resource definitions
+│   │   ├── Resource.php     # Base Resource class
+│   │   ├── Fields/          # Field types
+│   │   ├── Filters/         # Filter types
+│   │   ├── Actions/         # Action types
+│   │   ├── UserResource.php
+│   │   └── RoleResource.php
+│   ├── Services/            # Business logic
+│   └── Http/Controllers/Api/
+├── resources/js/
+│   ├── components/          # Vue components
+│   │   ├── resource/        # Resource UI components
+│   │   ├── common/          # Reusable components
+│   │   └── form/            # Form components
+│   ├── services/            # API services
+│   ├── stores/              # Pinia stores
+│   └── composables/         # Composition functions
+├── .starter/                # Starter template utilities
+│   ├── setup.sh             # New project setup
+│   ├── update.sh            # Update from starter
+│   └── USAGE.md             # Usage guide
+└── project_development_guidelines/  # Documentation
+```
+
+## 🎯 Available Resources
+
+Current pre-built resources:
+- **Users** - User management with roles
+- **Roles** - Role management
+- **Countries** - Country reference data
+- **Timezones** - Timezone reference data
+
+Creating new resources is simple - see [resource-crud-system.md](project_development_guidelines/resource-crud-system.md).
+
+## 🔐 Environment Setup
+
+```bash
+cp .env.example .env
+php artisan key:generate
+
+# Configure your database
+DB_DATABASE=your_database
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+
+# Run migrations
+php artisan migrate --seed
+```
+
+## 🧪 Testing
+
+```bash
+# Backend tests (PHPUnit)
+php artisan test
+php artisan test --filter=ResourceTest
+
+# Frontend tests (Vitest)
+npm run test
+npm run test:ui
+
+# E2E tests (Playwright)
+npm run test:e2e
+npm run test:e2e:ui
+```
+
+## 📄 License
+
+This starter template is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## 🤝 Contributing
+
+This is a starter template. Fork it and make it your own!
+
+---
 
 ## About Laravel
 
