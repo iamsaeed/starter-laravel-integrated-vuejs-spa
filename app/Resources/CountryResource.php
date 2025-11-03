@@ -2,19 +2,20 @@
 
 namespace App\Resources;
 
+use App\Core\Resources\Actions\BulkDeleteAction;
+use App\Core\Resources\Actions\BulkUpdateAction;
+use App\Core\Resources\Fields\BelongsToMany;
+use App\Core\Resources\Fields\Boolean;
+use App\Core\Resources\Fields\Image;
+use App\Core\Resources\Fields\Number;
+use App\Core\Resources\Fields\Section;
+use App\Core\Resources\Fields\Select;
+use App\Core\Resources\Fields\Text;
+use App\Core\Resources\Fields\Textarea;
+use App\Core\Resources\Filters\BooleanFilter;
+use App\Core\Resources\Filters\SelectFilter;
+use App\Core\Resources\Resource;
 use App\Models\Country;
-use App\Resources\Actions\BulkDeleteAction;
-use App\Resources\Actions\BulkUpdateAction;
-use App\Resources\Fields\BelongsToMany;
-use App\Resources\Fields\Boolean;
-use App\Resources\Fields\Image;
-use App\Resources\Fields\Number;
-use App\Resources\Fields\Section;
-use App\Resources\Fields\Select;
-use App\Resources\Fields\Text;
-use App\Resources\Fields\Textarea;
-use App\Resources\Filters\BooleanFilter;
-use App\Resources\Filters\SelectFilter;
 
 class CountryResource extends Resource
 {

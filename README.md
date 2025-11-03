@@ -158,29 +158,57 @@ npm run build
 
 ```
 ├── app/
-│   ├── Resources/           # Resource definitions
-│   │   ├── Resource.php     # Base Resource class
-│   │   ├── Fields/          # Field types
-│   │   ├── Filters/         # Filter types
-│   │   ├── Actions/         # Action types
+│   ├── Core/                      # UPDATABLE - Core system from starter
+│   │   ├── Resources/
+│   │   │   ├── Resource.php       # Base Resource class
+│   │   │   ├── Fields/            # All field types
+│   │   │   ├── Filters/           # All filter types
+│   │   │   └── Actions/           # All action types
+│   │   ├── Services/
+│   │   │   └── ResourceService.php
+│   │   └── Http/Controllers/
+│   │       └── ResourceController.php
+│   │
+│   ├── Resources/                 # PROJECT-SPECIFIC - Your resources
 │   │   ├── UserResource.php
-│   │   └── RoleResource.php
-│   ├── Services/            # Business logic
-│   └── Http/Controllers/Api/
+│   │   ├── RoleResource.php
+│   │   ├── CountryResource.php
+│   │   └── TimezoneResource.php
+│   ├── Services/                  # Your services
+│   ├── Models/                    # Your models
+│   └── Http/Controllers/          # Your controllers
+│
 ├── resources/js/
-│   ├── components/          # Vue components
-│   │   ├── resource/        # Resource UI components
-│   │   ├── common/          # Reusable components
-│   │   └── form/            # Form components
-│   ├── services/            # API services
-│   ├── stores/              # Pinia stores
-│   └── composables/         # Composition functions
-├── .starter/                # Starter template utilities
-│   ├── setup.sh             # New project setup
-│   ├── update.sh            # Update from starter
-│   └── USAGE.md             # Usage guide
+│   ├── core/                      # UPDATABLE - Core UI system
+│   │   ├── components/resource/   # ResourceManager, ResourceTable, etc.
+│   │   ├── services/              # resourceService.js
+│   │   └── composables/           # Core composables
+│   │
+│   ├── components/                # PROJECT-SPECIFIC - Your components
+│   │   ├── common/
+│   │   └── form/
+│   ├── pages/                     # Your pages
+│   ├── services/                  # Your services
+│   └── stores/                    # Your stores
+│
+├── .starter/                      # Starter template utilities
+│   ├── setup.sh                   # New project setup
+│   ├── update.sh                  # Update from starter
+│   └── USAGE.md                   # Usage guide
+│
 └── project_development_guidelines/  # Documentation
 ```
+
+### Core vs Project Files
+
+**Core Files (Updatable):**
+- `app/Core/*` - Gets updated from starter
+- `resources/js/core/*` - Gets updated from starter
+
+**Project Files (Protected):**
+- `app/Resources/*` - Your custom resources
+- `app/Services/*`, `app/Models/*`, `app/Http/Controllers/*` - Your code
+- `resources/js/components/*`, `resources/js/pages/*`, etc. - Your frontend
 
 ## 🎯 Available Resources
 

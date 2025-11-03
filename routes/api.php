@@ -1,12 +1,12 @@
 <?php
 
+use App\Core\Http\Controllers\ResourceController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\CountriesController;
 use App\Http\Controllers\Api\EmailTemplateController;
 use App\Http\Controllers\Api\ImpersonationController;
 use App\Http\Controllers\Api\MediaController;
-use App\Http\Controllers\Api\ResourceController;
 use App\Http\Controllers\Api\SettingsController;
 use App\Http\Controllers\Api\StripeWebhookController;
 use App\Http\Controllers\Api\TimezonesController;

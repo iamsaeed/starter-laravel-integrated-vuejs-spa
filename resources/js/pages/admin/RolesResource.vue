@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import ResourceManager from '@/components/resource/ResourceManager.vue'
+import ResourceManager from '@/core/components/resource/ResourceManager.vue'
 
 function handleCreated(data) {
   console.log('Role created:', data)

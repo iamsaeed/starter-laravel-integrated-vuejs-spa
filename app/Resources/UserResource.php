@@ -2,20 +2,21 @@
 
 namespace App\Resources;
 
+use App\Core\Resources\Actions\BulkDeleteAction;
+use App\Core\Resources\Actions\BulkUpdateAction;
+use App\Core\Resources\Fields\BelongsToMany;
+use App\Core\Resources\Fields\Date;
+use App\Core\Resources\Fields\Email;
+use App\Core\Resources\Fields\Media;
+use App\Core\Resources\Fields\Password;
+use App\Core\Resources\Fields\Section;
+use App\Core\Resources\Fields\Select;
+use App\Core\Resources\Fields\Text;
+use App\Core\Resources\Filters\BelongsToManyFilter;
+use App\Core\Resources\Filters\SelectFilter;
+use App\Core\Resources\Resource;
 use App\Enums\Status;
 use App\Models\User;
-use App\Resources\Actions\BulkDeleteAction;
-use App\Resources\Actions\BulkUpdateAction;
-use App\Resources\Fields\BelongsToMany;
-use App\Resources\Fields\Date;
-use App\Resources\Fields\Email;
-use App\Resources\Fields\Media;
-use App\Resources\Fields\Password;
-use App\Resources\Fields\Section;
-use App\Resources\Fields\Select;
-use App\Resources\Fields\Text;
-use App\Resources\Filters\BelongsToManyFilter;
-use App\Resources\Filters\SelectFilter;
 
 class UserResource extends Resource
 {

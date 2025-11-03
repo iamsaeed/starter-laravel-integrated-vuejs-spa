@@ -2,12 +2,13 @@
 
 namespace App\Resources;
 
+use App\Core\Resources\Actions\BulkDeleteAction;
+use App\Core\Resources\Fields\BelongsToMany;
+use App\Core\Resources\Fields\Section;
+use App\Core\Resources\Fields\Text;
+use App\Core\Resources\Fields\Textarea;
+use App\Core\Resources\Resource;
 use App\Models\Role;
-use App\Resources\Actions\BulkDeleteAction;
-use App\Resources\Fields\BelongsToMany;
-use App\Resources\Fields\Section;
-use App\Resources\Fields\Text;
-use App\Resources\Fields\Textarea;
 
 class RoleResource extends Resource
 {

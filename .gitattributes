@@ -17,11 +17,21 @@ CHANGELOG.md export-ignore
 .env merge=ours
 .env.example merge=ours
 
+# Core system (updatable from starter) - keep theirs
+app/Core/* merge=theirs
+resources/js/core/* merge=theirs
+
 # Project-specific resources - keep yours
-app/Resources/UserResource.php merge=ours
-app/Resources/RoleResource.php merge=ours
-app/Resources/CountryResource.php merge=ours
-app/Resources/TimezoneResource.php merge=ours
+app/Resources/* merge=ours
+app/Services/* merge=ours
+app/Models/* merge=ours
+app/Http/Controllers/* merge=ours
+
+# Frontend project files - keep yours
+resources/js/components/* merge=ours
+resources/js/pages/* merge=ours
+resources/js/services/* merge=ours
+resources/js/stores/* merge=ours
 
 # Routes - manual merge
 routes/api.php merge=union

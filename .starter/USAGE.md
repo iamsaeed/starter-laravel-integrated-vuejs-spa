@@ -98,18 +98,24 @@ npm run test
 
 ### ✅ Safe to Update (Core System)
 
-These files are managed by the starter and safe to update:
+**These directories are ALWAYS updated from the starter:**
 
-- `app/Resources/Resource.php` - Base Resource class
-- `app/Resources/Fields/*` - All field types
-- `app/Resources/Filters/*` - All filter types
-- `app/Resources/Actions/*` - All action types
-- `app/Http/Controllers/Api/ResourceController.php` - Resource API controller
-- `app/Services/ResourceService.php` - Core resource service
-- `resources/js/components/resource/*` - All Vue resource components
-- `resources/js/services/resourceService.js` - Resource API service
-- `resources/js/composables/useResource.js` - Resource composables
+- `app/Core/*` - Entire core system (automatically updated)
+  - `app/Core/Resources/Resource.php` - Base Resource class
+  - `app/Core/Resources/Fields/*` - All field types
+  - `app/Core/Resources/Filters/*` - All filter types
+  - `app/Core/Resources/Actions/*` - All action types
+  - `app/Core/Services/ResourceService.php` - Core resource service
+  - `app/Core/Http/Controllers/ResourceController.php` - Resource API controller
+
+- `resources/js/core/*` - Entire core UI system (automatically updated)
+  - `resources/js/core/components/resource/*` - ResourceManager, ResourceTable, ResourceForm
+  - `resources/js/core/services/resourceService.js` - Resource API service
+  - `resources/js/core/composables/*` - Core composables
+
 - `.starter/*` - Helper scripts and docs
+
+**Note:** The `.gitattributes` file automatically accepts starter updates for these folders with `merge=theirs`.
 
 ### ⚠️ Manual Review Needed
 
@@ -123,19 +129,27 @@ These files may need manual conflict resolution:
 
 ### ❌ Never Update (Project-Specific)
 
-These files are project-specific and protected:
+**These directories are ALWAYS protected (your code):**
 
-- `app/Resources/UserResource.php` - Your custom User resource
-- `app/Resources/RoleResource.php` - Your custom Role resource
-- `app/Resources/CountryResource.php` - Your custom Country resource
-- `app/Resources/TimezoneResource.php` - Your custom Timezone resource
-- `app/Resources/*Resource.php` - Any other resources you create
+- `app/Resources/*` - All your custom resources
+  - `UserResource.php`, `RoleResource.php`, `CountryResource.php`, etc.
+  - Any resources you create
+
+- `app/Services/*` - Your custom services
+- `app/Models/*` - Your models
+- `app/Http/Controllers/*` - Your controllers
+
+- `resources/js/components/*` - Your Vue components
+- `resources/js/pages/*` - Your pages
+- `resources/js/services/*` - Your API services
+- `resources/js/stores/*` - Your Pinia stores
+
 - `database/migrations/*` - Your migrations
 - `.env` - Your environment config
 - `.env.example` - Your environment template
 - `README.md` - Your project README
 
-**Note:** The `.gitattributes` file automatically protects these files during merge.
+**Note:** The `.gitattributes` file automatically protects these folders with `merge=ours`.
 
 ## Handling Merge Conflicts
 

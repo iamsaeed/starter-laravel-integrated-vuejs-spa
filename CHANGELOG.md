@@ -8,9 +8,19 @@ and this project uses **date-based versioning** (YYYY.MM).
 ## [Unreleased]
 
 ### Added
-- Starter template system with helper scripts
-- Smart merging via .gitattributes
-- Update and setup automation scripts
+- **Core folder structure** - Separated updatable core from project-specific code
+  - `app/Core/*` - Updatable backend core system
+  - `resources/js/core/*` - Updatable frontend core system
+- Improved `.gitattributes` with `merge=theirs` for core folders
+- Automatic namespace updates for `App\Core` structure
+- Clearer separation between framework and application code
+
+### Changed
+- Moved all core resource system files to `app/Core/`
+- Moved all core Vue components to `resources/js/core/`
+- Updated all namespaces from `App\Resources\*` to `App\Core\Resources\*`
+- Updated all imports in frontend from `@/components/resource/*` to `@/core/components/resource/*`
+- Simplified merge strategy: core folders auto-update, project folders protected
 
 ## [v2025.01] - 2025-01-15
 
