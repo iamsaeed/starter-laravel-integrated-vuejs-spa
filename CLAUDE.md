@@ -269,3 +269,4 @@ Current registered resources in the system:
 
 View all resources: Check `config/resources.php`
 - do not git add commit or push without explicit human confirmation
+- do not run nom run build everytime you make a change in the frontend of this project

@@ -8,7 +8,6 @@ use App\Http\Controllers\Api\EmailTemplateController;
 use App\Http\Controllers\Api\ImpersonationController;
 use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\SettingsController;
-use App\Http\Controllers\Api\StripeWebhookController;
 use App\Http\Controllers\Api\TimezonesController;
 use App\Http\Controllers\Api\UserSettingsController;
 use Illuminate\Support\Facades\Route;
