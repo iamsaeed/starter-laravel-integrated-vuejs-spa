@@ -257,7 +257,24 @@ This starter template is open-sourced software licensed under the [MIT license](
 
 ## 🤝 Contributing
 
-This is a starter template. Fork it and make it your own!
+Even if you're using this template for your own project, you can contribute improvements back to the Core system!
+
+Found a bug in the resource system? Want to add a new Field type? See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+**What you can contribute:**
+- New Field, Filter, or Action types
+- Bug fixes in Core system (`app/Core/*`, `resources/js/core/*`)
+- Performance improvements
+- Documentation enhancements
+- Test coverage
+
+**Example contributions:**
+- `ColorPickerField.php` - New color picker field type
+- `NumberRangeFilter.php` - Filter by number ranges
+- `ExportPdfAction.php` - Export resources to PDF
+- Bug fixes, performance improvements, etc.
+
+Your project-specific code stays yours, but Core improvements benefit everyone! 🎉
 
 ---
 
