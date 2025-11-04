@@ -13,8 +13,6 @@ class Comment extends Model
 {
     use HasFactory, SoftDeletes;
 
-    // Connection removed - using default database
-
     protected static function newFactory()
     {
         return \Database\Factories\CommentFactory::new();
@@ -55,9 +53,7 @@ class Comment extends Model
 
     public function scopeWithReplies($query)
     {
-        // Load replies without user to avoid cross-database queries
-        // User data should be attached via CommentService using workspace_users_cache
-        return $query->with(['replies']);
+        return $query->with(['replies', 'replies.user']);
     }
 
     public function hasReplies(): bool

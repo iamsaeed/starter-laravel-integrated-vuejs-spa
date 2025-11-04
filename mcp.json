@@ -4,10 +4,6 @@
       "command": "php",
       "args": ["artisan", "mcp:start", "expenses"]
     },
-    "workspaces": {
-      "command": "php",
-      "args": ["artisan", "mcp:start", "workspaces"]
-    },
     "invitations": {
       "command": "php",
       "args": ["artisan", "mcp:start", "invitations"]

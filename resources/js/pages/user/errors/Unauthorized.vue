@@ -18,7 +18,7 @@ export default {
     ErrorPage,
   },
   setup() {
-    const helpText = 'Please log in to continue accessing your workspace.'
+    const helpText = 'Please log in to continue accessing this resource.'
 
     return {
       helpText,

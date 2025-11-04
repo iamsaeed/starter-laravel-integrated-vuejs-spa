@@ -75,7 +75,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{template}/variables', [EmailTemplateController::class, 'variables'])->name('variables');
     });
 
-    // Application routes (single-tenant)
     // Media upload routes
     Route::prefix('media')->name('api.media.')->group(function () {
         Route::post('/upload', [MediaController::class, 'upload'])->name('upload');

@@ -131,7 +131,7 @@ class ResetApplicationCommand extends Command
         }
 
         // Clean app storage directories (except .gitignore)
-        $appStorageDirs = ['public', 'private', 'tenants'];
+        $appStorageDirs = ['public', 'private'];
         foreach ($appStorageDirs as $dir) {
             $dirPath = storage_path("app/{$dir}");
             if (File::isDirectory($dirPath)) {

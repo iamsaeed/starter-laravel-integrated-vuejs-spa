@@ -29,7 +29,7 @@ class BlurPlaceholderService
             $disk = Storage::disk($media->disk);
 
             // Check if we're dealing with S3/remote storage
-            if (in_array($media->disk, ['landlord-s3'])) {
+            if (in_array($media->disk, ['s3'])) {
                 // Get the full path on S3
                 $pathGenerator = app(config('media-library.path_generator'));
                 $mediaPath = $pathGenerator->getPath($media).$media->file_name;
@@ -68,12 +68,12 @@ class BlurPlaceholderService
             // Clean up temp files
             @unlink($tempBlurPath);
             // Only unlink source if we downloaded it from S3
-            if (in_array($media->disk, ['landlord-s3'])) {
+            if (in_array($media->disk, ['s3'])) {
                 @unlink($tempSourcePath);
             }
 
             // Return the URL using signed URL for private disks
-            if (in_array($media->disk, ['landlord-s3'])) {
+            if (in_array($media->disk, ['s3'])) {
                 return $disk->temporaryUrl($blurPath, now()->addHours(1));
             }
 
