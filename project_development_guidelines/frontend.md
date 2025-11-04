@@ -6,20 +6,30 @@ This application is a Vue 3 Single Page Application (SPA) with a service-oriente
 
 ### Directory Structure
 
+**IMPORTANT:** This project uses a **Core folder structure** to separate updatable framework code from your project code.
+
 **Entry Points**
 - `resources/js/app.js` - Main entry for guest pages
 - `resources/js/spa.js` - SPA entry for admin panel
 
-**Core Directories**
-- `resources/js/router/` - Vue Router with route guards
-- `resources/js/stores/` - Pinia state management stores
-- `resources/js/services/` - API service layer (ALL API calls here)
-- `resources/js/components/` - Reusable Vue components
-- `resources/js/layouts/` - Layout components
-- `resources/js/pages/` - Page components
-- `resources/js/composables/` - Vue composables
-- `resources/js/directives/` - Custom Vue directives
-- `resources/js/utils/` - Utility functions
+**Core System (UPDATABLE from starter)**
+- `resources/js/core/` - Framework code that gets updated from starter template
+- `resources/js/core/components/resource/` - ResourceManager, ResourceTable, ResourceForm, etc.
+- `resources/js/core/services/` - resourceService.js (Core API client)
+- `resources/js/core/composables/` - Core composables
+- **NEVER modify files in resources/js/core/** - they get overwritten during updates
+
+**Your Project Directories (PROTECTED)**
+- `resources/js/router/` - Your Vue Router with route guards
+- `resources/js/stores/` - Your Pinia state management stores
+- `resources/js/services/` - Your API service layer (ALL API calls here)
+- `resources/js/components/` - Your reusable Vue components
+- `resources/js/layouts/` - Your layout components
+- `resources/js/pages/` - Your page components
+- `resources/js/composables/` - Your Vue composables
+- `resources/js/directives/` - Your custom Vue directives
+- `resources/js/utils/` - Your utility functions
+- **Protected** - Never overwritten during updates
 
 ## Core Architectural Rules
 
@@ -27,14 +37,20 @@ This application is a Vue 3 Single Page Application (SPA) with a service-oriente
 
 **ALL API calls MUST be in service files.** Never make API calls directly in components or stores.
 
-**Service Location:** `resources/js/services/`
+**Service Locations:**
+- Core Services: `resources/js/core/services/` (e.g., resourceService.js)
+- Your Services: `resources/js/services/` (e.g., authService.js, settingsService.js)
 
 **Pattern:**
 - Services export objects with async methods
 - Services use the centralized Axios instance from `utils/api.js`
 - Components and stores call service methods
 
-Reference: See `resources/js/services/authService.js`, `resources/js/services/settingsService.js`, and `resources/js/services/resourceService.js` for patterns.
+**Core Services:**
+- Always import from `@/core/services/*` for core functionality
+- Example: `import { resourceService } from '@/core/services/resourceService'`
+
+Reference: See `resources/js/services/authService.js`, `resources/js/services/settingsService.js`, and `resources/js/core/services/resourceService.js` for patterns.
 
 ### Pinia Store Pattern
 
@@ -55,11 +71,13 @@ Reference: See `resources/js/stores/auth.js`, `resources/js/stores/settings.js`,
 **Always check for existing components before creating new ones.**
 
 **Component Categories:**
-- **Form Components:** `components/form/` - FormInput, FormError, SelectInput, CheckboxInput
-- **Common UI:** `components/common/` - Icon, DarkModeToggle, Toast, ConfirmDialog, ToggleSwitch
-- **Resource CRUD:** `components/resource/` - ResourceManager, ResourceTable, ResourceForm, FilterBar, ActionButtons
-- **Settings:** `components/settings/` - SettingsForm, SettingGroup, CountrySelect, TimezoneSelect
-- **Layout:** `components/layout/` - Sidebar, Navbar, UserDropdown
+- **Core Resource CRUD** (UPDATABLE): `core/components/resource/` - ResourceManager, ResourceTable, ResourceForm, FilterBar, ActionButtons
+  - Always import from `@/core/components/resource/*`
+  - Never modify these components
+- **Form Components** (YOUR CODE): `components/form/` - FormInput, FormError, SelectInput, CheckboxInput
+- **Common UI** (YOUR CODE): `components/common/` - Icon, DarkModeToggle, Toast, ConfirmDialog, ToggleSwitch
+- **Settings** (YOUR CODE): `components/settings/` - SettingsForm, SettingGroup, CountrySelect, TimezoneSelect
+- **Layout** (YOUR CODE): `components/layout/` - Sidebar, Navbar, UserDropdown
 
 Reference: Browse respective folders to see available components before creating new ones.
 
@@ -67,7 +85,16 @@ Reference: Browse respective folders to see available components before creating
 
 The Resource Manager provides a generic CRUD interface for any backend Resource.
 
-**Usage:** `<ResourceManager resource-key="users" />`
+**Usage:**
+```vue
+<template>
+  <ResourceManager resource="users" />
+</template>
+
+<script setup>
+import ResourceManager from '@/core/components/resource/ResourceManager.vue'
+</script>
+```
 
 **Features:**
 - Automatic table rendering with sorting and pagination
@@ -76,7 +103,7 @@ The Resource Manager provides a generic CRUD interface for any backend Resource.
 - Bulk actions support
 - Create/Edit forms
 
-Reference: See `components/resource/ResourceManager.vue` for implementation.
+Reference: See `core/components/resource/ResourceManager.vue` for implementation.
 
 ## Routing
 

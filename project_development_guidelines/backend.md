@@ -6,26 +6,42 @@ This application follows a strict service-oriented architecture where all busine
 
 ### Directory Structure
 
-**Services Layer**
-- Location: `app/Services/`
-- Purpose: Contains all business logic
-- Examples: `AuthService.php`, `ResourceService.php`, `SettingsService.php`
+**IMPORTANT:** This project uses a **Core folder structure** to separate updatable framework code from your project code.
 
-**Controllers Layer**
+**Core System (UPDATABLE from starter)**
+- Location: `app/Core/`
+- Purpose: Framework code that gets updated from starter template
+- Contents:
+  - `app/Core/Resources/` - Base Resource class, Fields, Filters, Actions
+  - `app/Core/Services/ResourceService.php` - Core CRUD service
+  - `app/Core/Http/Controllers/ResourceController.php` - Core controller
+- **NEVER modify files in app/Core/** - they get overwritten during updates
+
+**Your Services Layer**
+- Location: `app/Services/`
+- Purpose: Contains YOUR business logic
+- Examples: `AuthService.php`, `EmailTemplateService.php`, `SettingsService.php`
+- **Protected** - Never overwritten during updates
+
+**Your Controllers Layer**
 - Location: `app/Http/Controllers/Api/`
 - Purpose: Handle HTTP concerns only (validation, responses)
-- Examples: `AuthController.php`, `ResourceController.php`, `SettingsController.php`
+- Examples: `AuthController.php`, `SettingsController.php`
+- **Protected** - Never overwritten during updates
 
-**Resources System**
+**Your Resources**
 - Location: `app/Resources/`
-- Purpose: Define CRUD interfaces for models
-- Examples: `UserResource.php`, `Resource.php`
-- Sub-folders: `Fields/`, `Filters/`, `Actions/`
+- Purpose: Define YOUR CRUD interfaces for models
+- Examples: `UserResource.php`, `RoleResource.php`, `CountryResource.php`
+- Must extend: `App\Core\Resources\Resource`
+- Must import from: `App\Core\Resources\Fields\*`, `App\Core\Resources\Filters\*`, etc.
+- **Protected** - Never overwritten during updates
 
 **Models Layer**
 - Location: `app/Models/`
 - Purpose: Define database relationships and scopes only
-- Examples: `User.php`, `Setting.php`, `WorkspaceUserCache.php`
+- Examples: `User.php`, `Setting.php`, `Role.php`
+- **Protected** - Never overwritten during updates
 
 ## Core Architectural Rules
 
@@ -45,10 +61,28 @@ Reference: See `app/Services/AuthService.php` for the pattern.
 This is the CORE architecture pattern inspired by Laravel Nova. When building admin interfaces or CRUD features, always use the Resource system.
 
 **How It Works:**
-1. Create a Resource class in `app/Resources/`
-2. Define fields, filters, and actions
-3. Register in `config/resources.php`
-4. Automatic API endpoints are generated
+1. Create a Resource class in `app/Resources/` (extends `App\Core\Resources\Resource`)
+2. Import fields, filters, actions from `App\Core\Resources\*`
+3. Define fields, filters, and actions
+4. Register in `config/resources.php`
+5. Automatic API endpoints are generated
+
+**Example:**
+```php
+namespace App\Resources;
+
+use App\Core\Resources\Resource;
+use App\Core\Resources\Fields\ID;
+use App\Core\Resources\Fields\Text;
+use App\Core\Resources\Fields\Email;
+use App\Models\User;
+
+class UserResource extends Resource
+{
+    public static string $model = User::class;
+    // ...
+}
+```
 
 **Automatic Endpoints:**
 - GET `/api/resources/{resource}/meta` - Field definitions
