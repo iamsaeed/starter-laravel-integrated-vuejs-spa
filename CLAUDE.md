@@ -73,9 +73,9 @@ Component → Service (API calls) → Store (State) → Component
 ```
 
 **Key Locations:**
-- Backend Services: `app/Services/` (AuthService, ResourceService, EmailTemplateService, etc.)
-- Frontend Services: `resources/js/services/` (authService.js, resourceService.js, settingsService.js)
-- Controllers: `app/Http/Controllers/Api/` (HTTP only, no logic)
+- Backend Services: `app/Services/` & `app/Core/Services/` (AuthService, EmailTemplateService, ResourceService, etc.)
+- Frontend Services: `resources/js/services/` & `resources/js/core/services/` (authService.js, settingsService.js, resourceService.js)
+- Controllers: `app/Http/Controllers/Api/` & `app/Core/Http/Controllers/` (HTTP only, no logic)
 - Models: `app/Models/` (relationships and scopes only)
 
 ### Resource CRUD System (Laravel Nova-inspired)
@@ -89,25 +89,34 @@ Custom CRUD framework with automatic API endpoints, forms, and tables.
 - `GET/PUT/PATCH/DELETE /api/resources/{resource}/{id}` - CRUD operations
 - `POST /api/resources/{resource}/bulk/*` - Bulk operations
 
-**Resource Components:**
-- Resources: `app/Resources/` (UserResource.php, CountryResource.php, TimezoneResource.php, etc.)
-- Fields: `app/Resources/Fields/` (Text, Select, Number, Boolean, BelongsToMany, etc.)
-- Filters: `app/Resources/Filters/` (SelectFilter, BooleanFilter, etc.)
-- Actions: `app/Resources/Actions/` (BulkDeleteAction, BulkUpdateAction, etc.)
-- Frontend: `resources/js/components/resource/` (ResourceManager, ResourceTable, ResourceForm)
+**Core System (UPDATABLE from starter):**
+- Base Resource: `app/Core/Resources/Resource.php`
+- Fields: `app/Core/Resources/Fields/*` (Text, Select, Number, Boolean, BelongsToMany, etc.)
+- Filters: `app/Core/Resources/Filters/*` (SelectFilter, BooleanFilter, etc.)
+- Actions: `app/Core/Resources/Actions/*` (BulkDeleteAction, BulkUpdateAction, etc.)
+- Service: `app/Core/Services/ResourceService.php`
+- Controller: `app/Core/Http/Controllers/ResourceController.php`
+- Frontend: `resources/js/core/components/resource/*` (ResourceManager, ResourceTable, ResourceForm)
+- API Service: `resources/js/core/services/resourceService.js`
 
-**Register in:** `config/resources.php`
+**Project Resources (YOUR CODE - protected):**
+- Resources: `app/Resources/` (UserResource.php, CountryResource.php, TimezoneResource.php, etc.)
+- Register in: `config/resources.php`
 
 ### Frontend Architecture
 
 Vue 3 SPA with strict service layer pattern.
 
 **Key Patterns:**
-- **Services** (`resources/js/services/`): ALL API calls here, never in components/stores
+- **Services** (`resources/js/services/` & `resources/js/core/services/`): ALL API calls here, never in components/stores
 - **Stores** (`resources/js/stores/`): Pinia state management, calls services
-- **Composables** (`resources/js/composables/`): Reusable composition functions
-- **Components** (`resources/js/components/`): Organized by type (common, form, resource, settings)
+- **Composables** (`resources/js/composables/` & `resources/js/core/composables/`): Reusable composition functions
+- **Components** (`resources/js/components/` & `resources/js/core/components/`): Organized by type (common, form, resource, settings)
 - **Routes**: Always use named routes, never paths
+
+**Core vs Project Frontend:**
+- **Core** (`resources/js/core/*`): Framework components, UPDATABLE from starter
+- **Project** (`resources/js/components/*`, `resources/js/pages/*`, etc.): Your code, PROTECTED
 
 **Always check for existing:**
 - Select components: SelectInput, VirtualSelectInput, ServerSelectInput, ResourceSelectInput
@@ -132,6 +141,63 @@ Vue 3 SPA with strict service layer pattern.
 **Components & Features:**
 - Components: `project_development_guidelines/components/` (dialog, toast, tooltip, select, image, media)
 - Features: `project_development_guidelines/features/` (conditional fields, resource enhancements, email templates)
+
+## Core Folder Structure (CRITICAL)
+
+This starter template uses a **Core folder structure** to separate updatable framework code from your project code.
+
+### Backend Structure
+
+```
+app/
+├── Core/                           # UPDATABLE from starter (merge=theirs)
+│   ├── Resources/
+│   │   ├── Resource.php            # Base Resource class
+│   │   ├── Fields/*                # 18 field types
+│   │   ├── Filters/*               # 5 filter types
+│   │   └── Actions/*               # 4 action types
+│   ├── Services/
+│   │   └── ResourceService.php
+│   └── Http/Controllers/
+│       └── ResourceController.php
+│
+├── Resources/                      # YOUR CODE (merge=ours - protected)
+│   ├── UserResource.php
+│   ├── RoleResource.php
+│   └── *Resource.php               # Your custom resources
+├── Services/                       # YOUR CODE (protected)
+├── Models/                         # YOUR CODE (protected)
+└── Http/Controllers/               # YOUR CODE (protected)
+```
+
+### Frontend Structure
+
+```
+resources/js/
+├── core/                           # UPDATABLE from starter (merge=theirs)
+│   ├── components/resource/        # ResourceManager, ResourceTable, ResourceForm
+│   ├── services/                   # resourceService.js
+│   └── composables/                # Core composables
+│
+├── components/                     # YOUR CODE (merge=ours - protected)
+├── pages/                          # YOUR CODE (protected)
+├── services/                       # YOUR CODE (protected)
+└── stores/                         # YOUR CODE (protected)
+```
+
+### Key Rules for Core Structure
+
+1. **NEVER modify files in `app/Core/*` or `resources/js/core/*`** - these get overwritten during updates
+2. **Extend Core classes in YOUR resources** - Use `extends Resource` from `App\Core\Resources\Resource`
+3. **Import from Core** - `use App\Core\Resources\Fields\Text;` in your resources
+4. **Use Core components** - `import ResourceManager from '@/core/components/resource/ResourceManager.vue'`
+5. **Core updates automatically** - When you update from starter, Core files are replaced with `merge=theirs`
+6. **Your code is protected** - Your resources, services, components are never overwritten with `merge=ours`
+
+### Namespaces
+
+- **Core System:** `App\Core\*` (framework code)
+- **Your Project:** `App\*` (application code)
 
 ## Critical Project Rules
 
@@ -202,3 +268,4 @@ Current registered resources in the system:
 - **timezones** - Timezone reference data
 
 View all resources: Check `config/resources.php`
+- do not git add commit or push without explicit human confirmation

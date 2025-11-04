@@ -38,6 +38,16 @@ The backend Resource class drives **100% of the frontend behavior**. On the fron
 ### Step 1: Create Backend Resource (One Time)
 ```php
 // app/Resources/UserResource.php
+namespace App\Resources;
+
+use App\Core\Resources\Resource;
+use App\Core\Resources\Fields\ID;
+use App\Core\Resources\Fields\Text;
+use App\Core\Resources\Fields\Email;
+use App\Core\Resources\Fields\Select;
+use App\Models\User;
+use App\Enums\Status;
+
 class UserResource extends Resource
 {
     public static string $model = User::class;
@@ -55,6 +65,8 @@ class UserResource extends Resource
 }
 ```
 
+**Note:** Always extend from `App\Core\Resources\Resource` and import fields from `App\Core\Resources\Fields\*`
+
 ### Step 2: Register Resource
 ```php
 // config/resources.php
@@ -65,15 +77,17 @@ return [
 
 ### Step 3: Add Frontend Route & Component
 ```vue
-<!-- resources/js/pages/Users.vue -->
+<!-- resources/js/pages/admin/Users.vue -->
 <template>
   <ResourceManager resource="users" />
 </template>
 
 <script setup>
-import ResourceManager from '@/components/resource/ResourceManager.vue'
+import ResourceManager from '@/core/components/resource/ResourceManager.vue'
 </script>
 ```
+
+**Note:** Always import from `@/core/components/resource/*` for resource components
 
 **Done!** You now have a full CRUD interface with:
 - ✅ Sortable, searchable data table
@@ -88,60 +102,86 @@ import ResourceManager from '@/components/resource/ResourceManager.vue'
 
 ### Backend Structure
 
+**IMPORTANT:** This system uses a **Core folder structure** to separate updatable framework code from your project code.
+
 ```
 app/
-├── Resources/                    # Resource definitions
-│   ├── Resource.php             # Base abstract class
-│   ├── UserResource.php         # Example resource
-│   ├── Fields/                  # Field types
-│   │   ├── Field.php           # Base field
-│   │   ├── Text.php
-│   │   ├── Number.php
-│   │   ├── Boolean.php
-│   │   ├── Date.php
-│   │   ├── Select.php
-│   │   ├── BelongsTo.php
-│   │   ├── HasMany.php
-│   │   └── MorphMany.php
-│   ├── Filters/                 # Filter types
-│   │   ├── Filter.php
-│   │   ├── SelectFilter.php
-│   │   └── DateRangeFilter.php
-│   └── Actions/                 # Action types
-│       ├── Action.php
-│       ├── ExportAction.php
-│       ├── BulkDeleteAction.php
-│       └── BulkUpdateAction.php
-├── Services/
-│   └── ResourceService.php      # Generic CRUD service
-└── Http/
-    └── Controllers/Api/
-        └── ResourceController.php  # Generic controller
+├── Core/                        # UPDATABLE from starter (merge=theirs)
+│   ├── Resources/
+│   │   ├── Resource.php         # Base abstract class
+│   │   ├── Fields/              # 18 Field types
+│   │   │   ├── Field.php       # Base field
+│   │   │   ├── Text.php
+│   │   │   ├── Number.php
+│   │   │   ├── Boolean.php
+│   │   │   ├── Date.php
+│   │   │   ├── Select.php
+│   │   │   ├── BelongsTo.php
+│   │   │   ├── BelongsToMany.php
+│   │   │   ├── HasMany.php
+│   │   │   ├── Email.php
+│   │   │   ├── Password.php
+│   │   │   ├── Image.php
+│   │   │   ├── Media.php
+│   │   │   └── ...
+│   │   ├── Filters/             # 5 Filter types
+│   │   │   ├── Filter.php
+│   │   │   ├── SelectFilter.php
+│   │   │   ├── BooleanFilter.php
+│   │   │   ├── DateRangeFilter.php
+│   │   │   └── BelongsToManyFilter.php
+│   │   └── Actions/             # 4 Action types
+│   │       ├── Action.php
+│   │       ├── ExportAction.php
+│   │       ├── BulkDeleteAction.php
+│   │       └── BulkUpdateAction.php
+│   ├── Services/
+│   │   └── ResourceService.php  # Generic CRUD service
+│   └── Http/Controllers/
+│       └── ResourceController.php  # Generic controller
+│
+├── Resources/                   # YOUR CODE (merge=ours - protected)
+│   ├── UserResource.php         # Your resources
+│   ├── RoleResource.php
+│   ├── CountryResource.php
+│   └── *Resource.php           # Any resources you create
 ```
+
+**Key Points:**
+- **NEVER modify files in `app/Core/*`** - they get overwritten during updates
+- **Always extend from `App\Core\Resources\Resource`** in your resources
+- **Import fields/filters/actions from `App\Core\Resources\*`**
+- Your resources in `app/Resources/` are protected and never overwritten
 
 ### Frontend Structure
 
 ```
 resources/js/
-├── components/
-│   └── resource/
-│       ├── ResourceManager.vue   # 🎯 MAIN ENTRY POINT - Use this!
-│       │                         # Handles everything: table, forms, modals, validation
-│       │
-│       ├── ResourceTable.vue     # Internal: Generic data table
-│       ├── ResourceForm.vue      # Internal: Generic form
-│       ├── fields/               # Internal: Field renderers
-│       │   ├── TextField.vue
-│       │   ├── SelectField.vue
-│       │   ├── BelongsToField.vue
-│       │   └── ...
-│       ├── filters/              # Internal: Filter components
-│       │   └── FilterBar.vue
-│       └── actions/              # Internal: Action components
-│           └── ActionButtons.vue
-└── services/
-    └── resourceService.js        # Internal: Generic API client
+├── core/                        # UPDATABLE from starter (merge=theirs)
+│   ├── components/resource/
+│   │   ├── ResourceManager.vue  # 🎯 MAIN ENTRY POINT - Use this!
+│   │   │                        # Handles everything: table, forms, modals, validation
+│   │   ├── ResourceTable.vue    # Internal: Generic data table
+│   │   ├── ResourceForm.vue     # Internal: Generic form
+│   │   ├── FilterBar.vue        # Internal: Filter bar
+│   │   ├── FieldRenderer.vue    # Internal: Field renderer
+│   │   ├── ActionButtons.vue    # Internal: Action buttons
+│   │   └── QuickCreateModal.vue # Internal: Quick create
+│   └── services/
+│       └── resourceService.js   # Internal: Generic API client
+│
+├── pages/                       # YOUR CODE (protected)
+│   └── admin/
+│       ├── UsersResource.vue    # Your resource pages
+│       └── *Resource.vue
+├── components/                  # YOUR CODE (protected)
+└── services/                    # YOUR CODE (protected)
 ```
+
+**Key Points:**
+- **NEVER modify files in `resources/js/core/*`** - they get overwritten during updates
+- **Always import from `@/core/components/resource/*`** in your pages
+- Your pages and components are protected and never overwritten
 
 **Note**: You typically only import `ResourceManager.vue`. The other components are internal implementation details used by ResourceManager.
 
