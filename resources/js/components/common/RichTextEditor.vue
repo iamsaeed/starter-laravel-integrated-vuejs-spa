@@ -307,7 +307,7 @@ import TaskItem from '@tiptap/extension-task-item'
 import Underline from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
 import CharacterCount from '@tiptap/extension-character-count'
-import { EnhancedImageExtension } from '@/utils/tiptap/EnhancedImageExtension'
+import Image from '@tiptap/extension-image'
 import { mediaService } from '@/services/mediaService'
 import Icon from '@/components/common/Icon.vue'
 import { useToast } from '@/composables/useToast'
@@ -533,21 +533,12 @@ const editor = useEditor({
         class: 'text-primary-600 dark:text-primary-400 underline cursor-pointer hover:text-primary-700'
       }
     }),
-    EnhancedImageExtension.configure({
+    Image.configure({
       HTMLAttributes: {
         class: 'max-w-full h-auto rounded-lg'
       },
-      uploadFunction: props.uploadEnabled ? handleImageUploadWithProgress : null,
-      deleteFunction: props.uploadEnabled ? handleImageDelete : null,
-      onUploadStart,
-      onUploadComplete,
-      onUploadError,
-      onUploadProgress: handleProgressUpdate,
-      onImageClick: null,
-      onImageRightClick: null,
-      enableLightbox: false,
-      enableContextMenu: false,
-      generatePlaceholder: true
+      inline: false,
+      allowBase64: true
     }),
     TaskList,
     TaskItem.configure({

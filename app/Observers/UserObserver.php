@@ -5,7 +5,6 @@ namespace App\Observers;
 use App\Models\Setting;
 use App\Models\SettingList;
 use App\Models\User;
-use App\Services\UserCacheService;
 
 class UserObserver
 {

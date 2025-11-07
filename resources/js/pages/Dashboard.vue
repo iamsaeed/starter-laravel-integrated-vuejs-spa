@@ -27,11 +27,10 @@
       </div>
 
       <!-- Recent Activity -->
-      <ActivityFeed
-        :activities="activities"
-        :show-view-all="true"
-        @view-all="handleViewAllActivities"
-      />
+      <div class="card p-6">
+        <h2 class="text-xl font-semibold text-title mb-4">Recent Activity</h2>
+        <p class="text-subtitle">Activity feed coming soon</p>
+      </div>
     </div>
   </div>
 </template>
@@ -40,14 +39,12 @@
 import { ref } from 'vue'
 import Icon from '@/components/common/Icon.vue'
 import StatCard from '@/components/stats/StatCard.vue'
-import ActivityFeed from '@/components/activity/ActivityFeed.vue'
 
 export default {
   name: 'Dashboard',
   components: {
     Icon,
     StatCard,
-    ActivityFeed,
   },
   setup() {
     const stats = ref([
@@ -88,41 +85,8 @@ export default {
       },
     ])
 
-    const activities = ref([
-      {
-        message: 'New user registered',
-        time: '2 minutes ago',
-        type: 'info',
-      },
-
-      {
-        message: 'New task assigned',
-        time: '3 hours ago',
-        type: 'primary',
-        badge: 'New',
-      },
-      {
-        message: 'Server backup completed',
-        time: '5 hours ago',
-        type: 'success',
-      },
-      {
-        message: 'Payment received',
-        time: '1 day ago',
-        type: 'success',
-        badge: '$1,200',
-      },
-    ])
-
-    const handleViewAllActivities = () => {
-      console.log('View all activities clicked')
-      // Navigate to activities page or open modal
-    }
-
     return {
       stats,
-      activities,
-      handleViewAllActivities,
     }
   },
 }

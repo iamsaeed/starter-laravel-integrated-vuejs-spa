@@ -10,8 +10,6 @@ Laravel 12 + Vue 3 SPA application with custom Resource CRUD system, comprehensi
 - Backend: Laravel 12, PHP 8.2, Laravel Sanctum, Spatie Media Library, Laravel Boost
 - Frontend: Vue 3, Pinia, Vue Router, Vite, Tailwind CSS 4, VeeValidate, TipTap Editor
 - Testing: PHPUnit (backend), Vitest (unit/integration), Playwright (E2E)
-- Payments: Stripe, Razorpay, Laravel Cashier
-- AI: Neuron AI integration
 
 ## Commands
 
@@ -246,7 +244,6 @@ resources/js/
 - Vue 3: https://vuejs.org/guide/introduction.html
 - Tailwind CSS 4: https://tailwindcss.com/docs
 - Spatie Media Library: https://spatie.be/docs/laravel-medialibrary
-- Neuron AI: https://docs.neuron-ai.dev/
 
 ## Tailwind CSS 4 Notes
 
@@ -268,5 +265,5 @@ Current registered resources in the system:
 - **timezones** - Timezone reference data
 
 View all resources: Check `config/resources.php`
-- do not git add commit or push without explicit human confirmation
+- do not git add or git commit or or push without explicit human confirmation
 - do not run nom run build everytime you make a change in the frontend of this project

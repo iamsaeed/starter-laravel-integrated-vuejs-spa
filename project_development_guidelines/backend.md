@@ -359,12 +359,6 @@ This application uses Laravel 12's streamlined structure:
 - Service providers in `bootstrap/providers.php`
 - Commands auto-register from `app/Console/Commands/`
 
-## AI Development with Neuron AI
-
-When developing AI features (Agents, Workflows, Tools, Nodes), always check the documentation at https://docs.neuron-ai.dev/
-
-This includes any tests related to the Neuron AI package.
-
 ## Code Formatting
 
 **MANDATORY:** Run `vendor/bin/pint --dirty` before finalizing any changes.
@@ -400,5 +394,4 @@ Reference: See `project_development_guidelines/settings.md` and `app/Services/Se
 - Multi-Tenancy: `project_development_guidelines/features/multi-tenancy.md`
 - Module System: `project_development_guidelines/features/module-system.md`
 - Multi-Tenancy (Stancl): https://tenancyforlaravel.com/docs
-- Neuron AI: https://docs.neuron-ai.dev/
 - Testing: `TESTING.md`
