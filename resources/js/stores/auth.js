@@ -23,11 +23,80 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  // Helper function to get settings from localStorage
+  const getSettingsFromStorage = () => {
+    // Get all localStorage keys that start with 'setting_'
+    const settings = {}
+
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i)
+      if (key && key.startsWith('setting_')) {
+        const settingKey = key.replace('setting_', '')
+        const value = localStorage.getItem(key)
+
+        if (value !== null) {
+          // Try to parse as JSON for booleans and numbers, fallback to string
+          try {
+            settings[settingKey] = JSON.parse(value)
+          } catch {
+            settings[settingKey] = value
+          }
+        }
+      }
+    }
+
+    return Object.keys(settings).length > 0 ? settings : null
+  }
+
+  // Helper function to save settings to localStorage
+  const saveSettingsToStorage = (settings) => {
+    if (settings) {
+      // Save each setting as individual key-value pair
+      Object.keys(settings).forEach(key => {
+        const value = settings[key]
+
+        // Store value directly (strings as-is, booleans/numbers as JSON)
+        if (typeof value === 'string') {
+          localStorage.setItem(`setting_${key}`, value)
+        } else {
+          localStorage.setItem(`setting_${key}`, JSON.stringify(value))
+        }
+      })
+    } else {
+      // Remove all settings by iterating through localStorage
+      const keysToRemove = []
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i)
+        if (key && key.startsWith('setting_')) {
+          keysToRemove.push(key)
+        }
+      }
+      keysToRemove.forEach(key => localStorage.removeItem(key))
+    }
+  }
+
+  // Helper function to get impersonation data from localStorage
+  const getImpersonationFromStorage = () => {
+    const storedImpersonation = localStorage.getItem('impersonation_status')
+    return storedImpersonation ? JSON.parse(storedImpersonation) : null
+  }
+
+  // Helper function to save impersonation data to localStorage
+  const saveImpersonationToStorage = (impersonation) => {
+    if (impersonation) {
+      localStorage.setItem('impersonation_status', JSON.stringify(impersonation))
+    } else {
+      localStorage.removeItem('impersonation_status')
+    }
+  }
+
   // State
   const user = ref(getUserFromStorage())
   const token = ref(localStorage.getItem('auth_token'))
   const isLoading = ref(false)
   const isInitializing = ref(false) // Track initial app load user fetch
+  const cachedSettings = ref(getSettingsFromStorage())
+  const impersonationStatus = ref(getImpersonationFromStorage())
 
   // Getters
   const isAuthenticated = computed(() => !!token.value && !!user.value)
@@ -45,6 +114,30 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = response.user
       localStorage.setItem('auth_token', response.token)
       saveUserToStorage(response.user)
+
+      // Store settings and impersonation status
+      if (response.settings) {
+        cachedSettings.value = response.settings
+        saveSettingsToStorage(response.settings)
+
+        // Initialize settings store with cached data
+        const { useSettingsStore } = await import('./settings')
+        const settingsStore = useSettingsStore()
+        Object.assign(settingsStore.userSettings, response.settings)
+
+        // Apply theme and layout immediately after login
+        if (response.settings.user_theme) {
+          settingsStore.applyTheme(response.settings.user_theme)
+        }
+        if (response.settings.user_admin_layout) {
+          settingsStore.applyLayout(response.settings.user_admin_layout)
+        }
+      }
+
+      if (response.impersonation) {
+        impersonationStatus.value = response.impersonation
+        saveImpersonationToStorage(response.impersonation)
+      }
 
       // Set axios default header
       window.axios.defaults.headers.common['Authorization'] = `Bearer ${response.token}`
@@ -87,9 +180,19 @@ export const useAuthStore = defineStore('auth', () => {
       // Clear state regardless of API call success
       token.value = null
       user.value = null
+      cachedSettings.value = null
+      impersonationStatus.value = null
       localStorage.removeItem('auth_token')
       saveUserToStorage(null)
+      saveSettingsToStorage(null)
+      saveImpersonationToStorage(null)
       delete window.axios.defaults.headers.common['Authorization']
+
+      // Reset settings store
+      const { useSettingsStore } = await import('./settings')
+      const settingsStore = useSettingsStore()
+      settingsStore.resetSettings()
+
       isLoading.value = false
     }
   }
@@ -104,6 +207,31 @@ export const useAuthStore = defineStore('auth', () => {
       const response = await authService.getUser()
       user.value = response.user
       saveUserToStorage(response.user)
+
+      // Store settings and impersonation status
+      if (response.settings) {
+        cachedSettings.value = response.settings
+        saveSettingsToStorage(response.settings)
+
+        // Initialize settings store with cached data
+        const { useSettingsStore } = await import('./settings')
+        const settingsStore = useSettingsStore()
+        Object.assign(settingsStore.userSettings, response.settings)
+
+        // Apply theme and layout immediately
+        if (response.settings.user_theme) {
+          settingsStore.applyTheme(response.settings.user_theme)
+        }
+        if (response.settings.user_admin_layout) {
+          settingsStore.applyLayout(response.settings.user_admin_layout)
+        }
+      }
+
+      if (response.impersonation) {
+        impersonationStatus.value = response.impersonation
+        saveImpersonationToStorage(response.impersonation)
+      }
+
       return response.user
     } catch (error) {
       // If fetching user fails (401), clear auth state
@@ -148,9 +276,19 @@ export const useAuthStore = defineStore('auth', () => {
       // Clear state regardless of API call success
       token.value = null
       user.value = null
+      cachedSettings.value = null
+      impersonationStatus.value = null
       localStorage.removeItem('auth_token')
       saveUserToStorage(null)
+      saveSettingsToStorage(null)
+      saveImpersonationToStorage(null)
       delete window.axios.defaults.headers.common['Authorization']
+
+      // Reset settings store
+      const { useSettingsStore } = await import('./settings')
+      const settingsStore = useSettingsStore()
+      settingsStore.resetSettings()
+
       isLoading.value = false
     }
   }
@@ -182,6 +320,31 @@ export const useAuthStore = defineStore('auth', () => {
       const response = await authService.getUser()
       user.value = response.user
       saveUserToStorage(response.user)
+
+      // Store settings and impersonation status
+      if (response.settings) {
+        cachedSettings.value = response.settings
+        saveSettingsToStorage(response.settings)
+
+        // Initialize settings store with cached data
+        const { useSettingsStore } = await import('./settings')
+        const settingsStore = useSettingsStore()
+        Object.assign(settingsStore.userSettings, response.settings)
+
+        // Apply theme and layout immediately
+        if (response.settings.user_theme) {
+          settingsStore.applyTheme(response.settings.user_theme)
+        }
+        if (response.settings.user_admin_layout) {
+          settingsStore.applyLayout(response.settings.user_admin_layout)
+        }
+      }
+
+      if (response.impersonation) {
+        impersonationStatus.value = response.impersonation
+        saveImpersonationToStorage(response.impersonation)
+      }
+
       return response.user
     } catch (error) {
       // If fetching user fails (401), clear auth state
@@ -200,6 +363,8 @@ export const useAuthStore = defineStore('auth', () => {
     token,
     isLoading,
     isInitializing,
+    cachedSettings,
+    impersonationStatus,
     // Getters
     isAuthenticated,
     userName,

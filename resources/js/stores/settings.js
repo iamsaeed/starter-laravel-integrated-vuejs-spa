@@ -60,7 +60,7 @@ export const useSettingsStore = defineStore('settings', () => {
       if (key === 'user_theme') {
         applyTheme(value)
         // Update cache (database is source of truth)
-        localStorage.setItem('theme', value)
+        localStorage.setItem('setting_user_theme', value)
       }
 
       return response
@@ -82,13 +82,13 @@ export const useSettingsStore = defineStore('settings', () => {
 
       // Apply theme if it was updated
       if (settings.user_theme) {
-        localStorage.setItem('theme', settings.user_theme)
+        localStorage.setItem('setting_user_theme', settings.user_theme)
         applyTheme(settings.user_theme)
       }
 
       // Apply layout if it was updated
       if (settings.user_admin_layout) {
-        localStorage.setItem('adminLayout', settings.user_admin_layout)
+        localStorage.setItem('setting_user_admin_layout', settings.user_admin_layout)
         applyLayout(settings.user_admin_layout)
       }
 
@@ -222,12 +222,12 @@ export const useSettingsStore = defineStore('settings', () => {
         const theme = userSettings.value.user_theme
         applyTheme(theme)
         // Update cache
-        localStorage.setItem('theme', theme)
+        localStorage.setItem('setting_user_theme', theme)
       } else {
         // If no database setting, use default and DON'T rely on localStorage
         const defaultTheme = 'ocean'
         applyTheme(defaultTheme)
-        localStorage.setItem('theme', defaultTheme)
+        localStorage.setItem('setting_user_theme', defaultTheme)
       }
     } catch (error) {
       console.error('Failed to initialize theme:', error)
@@ -265,7 +265,7 @@ export const useSettingsStore = defineStore('settings', () => {
       // Apply to DOM immediately
       applyLayout(layoutName)
       // Update cache (database is source of truth)
-      localStorage.setItem('adminLayout', layoutName)
+      localStorage.setItem('setting_user_admin_layout', layoutName)
 
       return response
     } finally {
@@ -289,12 +289,12 @@ export const useSettingsStore = defineStore('settings', () => {
         const dbLayout = userSettings.value.user_admin_layout
         applyLayout(dbLayout)
         // Update cache
-        localStorage.setItem('adminLayout', dbLayout)
+        localStorage.setItem('setting_user_admin_layout', dbLayout)
       } else {
         // If no database setting, use default and DON'T rely on localStorage
         const defaultLayout = 'classic'
         applyLayout(defaultLayout)
-        localStorage.setItem('adminLayout', defaultLayout)
+        localStorage.setItem('setting_user_admin_layout', defaultLayout)
       }
 
       layoutInitialized.value = true
@@ -306,7 +306,7 @@ export const useSettingsStore = defineStore('settings', () => {
   }
 
   /**
-   * Reset settings store
+   * Reset settings store and remove all theme/layout classes from DOM
    */
   function resetSettings() {
     userSettings.value = {}
@@ -316,6 +316,23 @@ export const useSettingsStore = defineStore('settings', () => {
     countries.value = []
     timezones.value = []
     layoutInitialized.value = false
+
+    // Remove all theme classes from DOM
+    const themeNames = ['default', 'light', 'dark', 'ocean', 'sunset', 'forest', 'midnight', 'crimson', 'amber', 'slate', 'lavender', 'blue', 'green']
+    themeNames.forEach(theme => {
+      document.documentElement.classList.remove(`theme-${theme}`)
+    })
+    document.documentElement.removeAttribute('data-theme')
+
+    // Remove all layout classes from DOM
+    const layoutNames = ['classic', 'horizontal', 'compact', 'mini']
+    layoutNames.forEach(layout => {
+      document.documentElement.classList.remove(`layout-${layout}`)
+    })
+    document.documentElement.removeAttribute('data-layout')
+
+    // Remove dark mode class
+    document.documentElement.classList.remove('dark')
   }
 
   return {

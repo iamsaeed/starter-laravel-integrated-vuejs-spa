@@ -39,7 +39,7 @@ const toggleDarkMode = async () => {
   }
 
   // Save to localStorage
-  localStorage.setItem('darkMode', isDark.value ? 'dark' : 'light')
+  localStorage.setItem('setting_dark_mode', isDark.value ? 'dark' : 'light')
 
   // Save to database if user is authenticated
   if (authStore.isAuthenticated) {

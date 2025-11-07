@@ -660,4 +660,127 @@ class AuthControllerTest extends TestCase
         $this->assertTrue($user->hasRole('user'));
         $this->assertFalse($user->hasRole('admin'));
     }
+
+    public function test_login_returns_user_settings(): void
+    {
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => Hash::make('password123'),
+        ]);
+
+        // Update user settings (UserObserver already created default settings)
+        $settingsService = app(\App\Services\SettingsService::class);
+        $settingsService->setForUser($user, 'user_theme', 'ocean');
+        $settingsService->setForUser($user, 'items_per_page', 25);
+
+        $response = $this->postJson(route('api.login'), [
+            'email' => 'test@example.com',
+            'password' => 'password123',
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'message',
+                'user',
+                'token',
+                'settings',
+                'impersonation',
+            ])
+            ->assertJson([
+                'settings' => [
+                    'user_theme' => 'ocean',
+                    'items_per_page' => 25,
+                ],
+                'impersonation' => [
+                    'is_impersonating' => false,
+                ],
+            ]);
+    }
+
+    public function test_me_endpoint_returns_user_settings(): void
+    {
+        $user = User::factory()->create();
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        // Update user settings (UserObserver already created default settings)
+        $settingsService = app(\App\Services\SettingsService::class);
+        $settingsService->setForUser($user, 'user_theme', 'midnight');
+
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)
+            ->getJson(route('api.me'));
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'user',
+                'settings',
+                'impersonation',
+            ])
+            ->assertJson([
+                'settings' => [
+                    'user_theme' => 'midnight',
+                ],
+                'impersonation' => [
+                    'is_impersonating' => false,
+                ],
+            ]);
+    }
+
+    public function test_me_endpoint_returns_default_settings_for_new_user(): void
+    {
+        $user = User::factory()->create();
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)
+            ->getJson(route('api.me'));
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'user',
+                'settings' => [
+                    'user_theme',
+                    'dark_mode',
+                    'items_per_page',
+                ],
+                'impersonation',
+            ])
+            ->assertJson([
+                'impersonation' => [
+                    'is_impersonating' => false,
+                ],
+            ]);
+
+        // Verify default settings exist
+        $this->assertArrayHasKey('user_theme', $response['settings']);
+        $this->assertArrayHasKey('dark_mode', $response['settings']);
+        $this->assertArrayHasKey('items_per_page', $response['settings']);
+    }
+
+    public function test_login_returns_impersonation_status(): void
+    {
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => Hash::make('password123'),
+        ]);
+
+        $response = $this->postJson(route('api.login'), [
+            'email' => 'test@example.com',
+            'password' => 'password123',
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'impersonation' => [
+                    'is_impersonating',
+                    'admin',
+                    'started_at',
+                ],
+            ])
+            ->assertJson([
+                'impersonation' => [
+                    'is_impersonating' => false,
+                    'admin' => null,
+                    'started_at' => null,
+                ],
+            ]);
+    }
 }

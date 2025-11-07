@@ -44,7 +44,7 @@ class SettingsService
                 'settable_id' => $settableId,
             ],
             [
-                'value' => json_encode($value),
+                'value' => $this->encodeValue($value),
                 'group' => $group,
                 'label' => $label,
             ]
@@ -234,5 +234,24 @@ class SettingsService
             $cacheKey = $this->getCacheKey($key, $scope, $settableId);
             Cache::forget($cacheKey);
         }
+    }
+
+    /**
+     * Encode value for storage (raw text, not JSON)
+     */
+    protected function encodeValue(mixed $value): string
+    {
+        // For arrays/objects, use JSON encoding
+        if (is_array($value) || is_object($value)) {
+            return json_encode($value);
+        }
+
+        // For booleans, convert to string representation
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+
+        // For everything else (strings, numbers, null), convert to string
+        return (string) $value;
     }
 }

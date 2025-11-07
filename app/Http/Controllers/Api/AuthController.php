@@ -11,12 +11,18 @@ use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Resources\UserResource;
 use App\Services\AuthService;
+use App\Services\ImpersonationService;
+use App\Services\SettingsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    public function __construct(public AuthService $authService) {}
+    public function __construct(
+        public AuthService $authService,
+        public SettingsService $settingsService,
+        public ImpersonationService $impersonationService
+    ) {}
 
     /**
      * Register a new user.
@@ -41,10 +47,18 @@ class AuthController extends Controller
         $result = $this->authService->login($request->validated());
         $result['user']->load('roles');
 
+        // Get user settings
+        $settings = $this->settingsService->getForUser($result['user']);
+
+        // Get impersonation status
+        $impersonationStatus = $this->impersonationService->getStatus();
+
         return response()->json([
             'message' => 'Login successful.',
             'user' => new UserResource($result['user']),
             'token' => $result['token'],
+            'settings' => $settings,
+            'impersonation' => $impersonationStatus,
         ]);
     }
 
@@ -68,8 +82,16 @@ class AuthController extends Controller
         $user = $request->user();
         $user->load('roles');
 
+        // Get user settings
+        $settings = $this->settingsService->getForUser($user);
+
+        // Get impersonation status
+        $impersonationStatus = $this->impersonationService->getStatus();
+
         return response()->json([
             'user' => new UserResource($user),
+            'settings' => $settings,
+            'impersonation' => $impersonationStatus,
         ]);
     }
 

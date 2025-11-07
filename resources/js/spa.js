@@ -58,13 +58,10 @@ authStore.initAuth()
 const initializeApp = async () => {
   if (authStore.token) {
     try {
-      // Load user data
+      // Load user data (this now includes settings and impersonation status)
       await authStore.initializeUser()
 
-      // Load user settings from database (database is the source of truth)
-      await settingsStore.loadUserSettings()
-
-      // Apply theme and layout from database
+      // Apply theme and layout from cached settings (already loaded by initializeUser)
       await settingsStore.initTheme()
       await settingsStore.initLayout()
     } catch (error) {

@@ -346,9 +346,9 @@ function initDarkMode() {
     const toggleDarkMode = () => {
         document.documentElement.classList.toggle('dark');
 
-        // Save preference using 'darkMode' key (matches Vue.js frontend)
+        // Save preference using 'setting_dark_mode' key (matches Vue.js frontend)
         const isDark = document.documentElement.classList.contains('dark');
-        localStorage.setItem('darkMode', isDark ? 'dark' : 'light');
+        localStorage.setItem('setting_dark_mode', isDark ? 'dark' : 'light');
 
         // Update icons
         updateIcons();

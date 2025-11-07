@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->morphs('commentable');
+            $table->morphs('commentable'); // Already creates index on commentable_type and commentable_id
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->text('comment');
             $table->unsignedBigInteger('parent_id')->nullable();
@@ -21,7 +21,6 @@ return new class extends Migration
             $table->softDeletes();
 
             $table->foreign('parent_id')->references('id')->on('comments')->cascadeOnDelete();
-            $table->index(['commentable_type', 'commentable_id']);
             $table->index('parent_id');
         });
     }

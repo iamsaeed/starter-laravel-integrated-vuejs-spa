@@ -16,7 +16,6 @@
 import { onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useSettingsStore } from '@/stores/settings'
-import { settingsService } from '@/services/settingsService'
 import ToastContainer from '@/components/common/ToastContainer.vue'
 
 const authStore = useAuthStore()
@@ -24,50 +23,33 @@ const settingsStore = useSettingsStore()
 
 // Initialize dark mode and theme on app load
 onMounted(async () => {
-  // Check localStorage first for immediate application
-  const savedMode = localStorage.getItem('darkMode')
-  const savedTheme = localStorage.getItem('theme')
-
-  // Apply dark mode
-  if (savedMode === 'dark') {
-    document.documentElement.classList.add('dark')
-  } else if (savedMode === 'light') {
-    document.documentElement.classList.remove('dark')
-  }
-
-  // Apply theme
-  if (savedTheme) {
-    settingsStore.applyTheme(savedTheme)
-  }
-
-  // If user is authenticated, fetch their preferences from database
+  // Only apply cached settings if user is authenticated
+  // The auth store will apply fresh settings after login/fetch
   if (authStore.isAuthenticated) {
-    try {
-      const settings = await settingsService.getUserSettings('appearance')
+    // Check localStorage first for immediate application (prevents FOUC)
+    const savedMode = localStorage.getItem('setting_dark_mode')
+    const savedTheme = localStorage.getItem('setting_user_theme')
+    const savedLayout = localStorage.getItem('setting_user_admin_layout')
 
-      // Handle dark mode
-      if (settings.data && settings.data.dark_mode !== undefined) {
-        const isDark = settings.data.dark_mode
+    // Apply dark mode
+    if (savedMode === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else if (savedMode === 'light') {
+      document.documentElement.classList.remove('dark')
+    }
 
-        if (isDark) {
-          document.documentElement.classList.add('dark')
-        } else {
-          document.documentElement.classList.remove('dark')
-        }
+    // Apply theme
+    if (savedTheme) {
+      settingsStore.applyTheme(savedTheme)
+    }
 
-        // Sync with localStorage
-        localStorage.setItem('darkMode', isDark ? 'dark' : 'light')
-      }
-
-      // Handle theme
-      if (settings.data && settings.data.user_theme) {
-        const theme = settings.data.user_theme
-        localStorage.setItem('theme', theme)
-        settingsStore.applyTheme(theme)
-      }
-    } catch (error) {
-      console.error('Failed to load user preferences:', error)
+    // Apply layout
+    if (savedLayout) {
+      settingsStore.applyLayout(savedLayout)
     }
   }
+
+  // Settings are already loaded from /api/me or /api/login and cached
+  // No need to fetch them again on page refresh
 })
 </script>

@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { impersonationService } from '@/services/impersonationService'
@@ -37,33 +37,23 @@ const authStore = useAuthStore()
 const { showToast } = useToast()
 
 const loading = ref(false)
-const impersonationData = ref(null)
 
+// Use cached impersonation status from auth store
 const isImpersonating = computed(() => {
-  return impersonationData.value?.is_impersonating || false
+  return authStore.impersonationStatus?.is_impersonating || false
 })
 
-const currentUser = computed(() => authStore.user)
+const impersonationData = computed(() => authStore.impersonationStatus)
 
-const checkImpersonationStatus = async () => {
-  try {
-    const response = await impersonationService.getStatus()
-    impersonationData.value = response.data
-  } catch (error) {
-    console.error('Failed to check impersonation status:', error)
-  }
-}
+const currentUser = computed(() => authStore.user)
 
 const handleStopImpersonating = async () => {
   loading.value = true
   try {
     await impersonationService.stopImpersonating()
 
-    // Refresh user data
+    // Refresh user data (this will also update impersonation status)
     await authStore.fetchUser()
-
-    // Check status again
-    await checkImpersonationStatus()
 
     showToast({
       message: 'Successfully stopped impersonating.',
@@ -82,13 +72,4 @@ const handleStopImpersonating = async () => {
     loading.value = false
   }
 }
-
-onMounted(() => {
-  checkImpersonationStatus()
-})
-
-// Expose checkImpersonationStatus for parent components to call
-defineExpose({
-  checkImpersonationStatus,
-})
 </script>

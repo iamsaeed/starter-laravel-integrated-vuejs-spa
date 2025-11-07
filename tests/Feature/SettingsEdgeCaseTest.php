@@ -22,7 +22,7 @@ class SettingsEdgeCaseTest extends TestCase
         // Verify that the is_encrypted flag exists and can be set
         $setting = Setting::create([
             'key' => 'encrypted_api_key',
-            'value' => json_encode('test_value'),
+            'value' => 'test_value',
             'type' => 'string',
             'group' => 'general',
             'scope' => 'user',
@@ -75,7 +75,7 @@ class SettingsEdgeCaseTest extends TestCase
         // Create and cache a setting
         $setting = Setting::create([
             'key' => 'cached_setting',
-            'value' => json_encode('initial_value'),
+            'value' => 'initial_value',
             'type' => 'string',
             'group' => 'general',
             'scope' => 'global',
@@ -116,7 +116,7 @@ class SettingsEdgeCaseTest extends TestCase
         // Create a setting
         $setting = Setting::create([
             'key' => 'deletable_cached_setting',
-            'value' => json_encode('test_value'),
+            'value' => 'test_value',
             'type' => 'string',
             'group' => 'general',
             'scope' => 'global',
@@ -153,7 +153,7 @@ class SettingsEdgeCaseTest extends TestCase
         // Create a setting that references this theme
         $setting = Setting::create([
             'key' => 'referenced_theme',
-            'value' => json_encode('ocean'),
+            'value' => 'ocean',
             'type' => 'reference',
             'group' => 'appearance',
             'scope' => 'user',
@@ -185,7 +185,7 @@ class SettingsEdgeCaseTest extends TestCase
         // Create a setting that references this country
         $setting = Setting::create([
             'key' => 'user_country',
-            'value' => json_encode('US'),
+            'value' => 'US',
             'type' => 'reference',
             'group' => 'localization',
             'scope' => 'user',
@@ -217,7 +217,7 @@ class SettingsEdgeCaseTest extends TestCase
         // Create a setting that references this timezone
         $setting = Setting::create([
             'key' => 'user_timezone',
-            'value' => json_encode('America/New_York'),
+            'value' => 'America/New_York',
             'type' => 'reference',
             'group' => 'localization',
             'scope' => 'user',
@@ -401,7 +401,7 @@ class SettingsEdgeCaseTest extends TestCase
         // Try to create duplicate setting with same key, scope, settable_type, settable_id
         Setting::create([
             'key' => 'duplicate_test',
-            'value' => json_encode('value1'),
+            'value' => 'value1',
             'type' => 'string',
             'group' => 'general',
             'scope' => 'user',
@@ -415,7 +415,7 @@ class SettingsEdgeCaseTest extends TestCase
 
         Setting::create([
             'key' => 'duplicate_test',
-            'value' => json_encode('value2'),
+            'value' => 'value2',
             'type' => 'string',
             'group' => 'general',
             'scope' => 'user',

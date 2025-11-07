@@ -30,7 +30,7 @@ class Setting extends Model
     protected function casts(): array
     {
         return [
-            'value' => 'array',
+            // Don't cast value - we handle JSON encoding/decoding in SettingsService
             'is_public' => 'boolean',
             'is_encrypted' => 'boolean',
             'validation_rules' => 'array',
@@ -82,20 +82,42 @@ class Setting extends Model
             }
         }
 
-        // The value column is cast as array, so Laravel already JSON-decoded it
-        // If it's a string, it means it was a simple JSON string value
-        if (is_string($rawValue)) {
-            $rawValue = json_decode($rawValue, true);
+        // If type is not set, try to parse as JSON for backward compatibility
+        if (! $this->type) {
+            if (is_string($rawValue)) {
+                $decoded = json_decode($rawValue, true);
+
+                return $decoded !== null ? $decoded : $rawValue;
+            }
+
+            return $rawValue;
         }
 
+        // Parse based on type
         return match ($this->type) {
-            'string' => is_array($rawValue) ? (string) current($rawValue) : (string) $rawValue,
-            'integer' => is_array($rawValue) ? (int) current($rawValue) : (int) $rawValue,
-            'boolean' => is_array($rawValue) ? (bool) current($rawValue) : (bool) $rawValue,
-            'array', 'json' => is_array($rawValue) ? $rawValue : json_decode($rawValue, true),
+            'string' => (string) $rawValue,
+            'integer' => (int) $rawValue,
+            'boolean' => $this->parseBoolean($rawValue),
+            'array', 'json' => is_string($rawValue) ? json_decode($rawValue, true) : $rawValue,
             'reference' => $rawValue,
             default => $rawValue,
         };
+    }
+
+    /**
+     * Parse boolean from string representation
+     */
+    protected function parseBoolean(mixed $value): bool
+    {
+        if (is_bool($value)) {
+            return $value;
+        }
+
+        if (is_string($value)) {
+            return in_array(strtolower($value), ['true', '1', 'yes', 'on']);
+        }
+
+        return (bool) $value;
     }
 
     public function setTypedValue(mixed $value): void

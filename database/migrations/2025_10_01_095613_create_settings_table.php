@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -14,7 +15,7 @@ return new class extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
             $table->string('key');
-            $table->json('value');
+            $table->text('value'); // Changed from json to text for manual JSON encoding/decoding
             $table->enum('type', ['string', 'integer', 'boolean', 'array', 'json', 'reference']);
             $table->string('group');
             $table->enum('scope', ['global', 'user', 'admin'])->default('global');
